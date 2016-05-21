@@ -3,9 +3,10 @@
 declare let module: any;
 declare let require: any;
 
+import { JavaScriptObfuscator } from 'javascript-obfuscator';
+
 let multimatch: any = require('multimatch'),
-    RawSource: any = require('webpack-core/lib/RawSource'),
-    JavaScriptObfuscator: any = require('javascript-obfuscator');
+    RawSource: any = require('webpack-core/lib/RawSource');
 
 class WebpackObfuscator {
     public options: any = {};
