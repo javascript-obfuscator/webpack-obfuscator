@@ -1,6 +1,6 @@
 {
   "name": "webpack-obfuscator",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "javascript-obfuscator plugin for Webpack",
   "main": "index.js",
   "dependencies": {
@@ -22,8 +22,7 @@
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "lite": "lite-server",
-    "start": "concurrent \"npm run tsc:w\" \"npm run lite\" ",
-    "postinstall": "tsc"
+    "start": "concurrent \"npm run tsc:w\" \"npm run lite\" "
   },
   "author": {
     "name": "sanex3339"
