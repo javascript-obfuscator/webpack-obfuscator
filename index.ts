@@ -1,8 +1,5 @@
 "use strict";
 
-declare let module: any;
-declare let require: any;
-
 import { JavaScriptObfuscator } from 'javascript-obfuscator';
 
 let multimatch: any = require('multimatch'),
