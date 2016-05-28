@@ -38,4 +38,3 @@ class WebpackObfuscator {
     }
 }
 module.exports = WebpackObfuscator;
-//# sourceMappingURL=index.js.map
