@@ -1,0 +1,8 @@
+{
+  "name": "webpack-obfuscator",
+  "version": false,
+  "ambientDependencies": {
+    "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#6834f97fb33561a3ad40695084da2b660efaee29",
+    "javascript-obfuscator": "github:DefinitelyTyped/DefinitelyTyped/javascript-obfuscator/javascript-obfuscator.d.ts"
+  }
+}
