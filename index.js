@@ -1,5 +1,5 @@
 "use strict";
-const JavaScriptObfuscator = require('javascript-obfuscator');
+const javascript_obfuscator_1 = require('javascript-obfuscator');
 let multimatch = require('multimatch'), RawSource = require('webpack-core/lib/RawSource');
 class WebpackObfuscator {
     constructor(options, excludes) {
@@ -22,7 +22,7 @@ class WebpackObfuscator {
                 });
                 files.forEach((file) => {
                     let asset = compilation.assets[file];
-                    compilation.assets[file] = new RawSource(JavaScriptObfuscator.obfuscate(asset.source(), this.options));
+                    compilation.assets[file] = new RawSource(javascript_obfuscator_1.JavaScriptObfuscator.obfuscate(asset.source(), this.options));
                 });
                 callback();
             });

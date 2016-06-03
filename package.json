@@ -1,11 +1,11 @@
 {
   "name": "webpack-obfuscator",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "javascript-obfuscator plugin for Webpack",
   "main": "index.js",
   "dependencies": {
     "gulp-util": "^3.0.5",
-    "javascript-obfuscator": "^0.5.1",
+    "javascript-obfuscator": "^0.5.2",
     "multimatch": "^2.0.0",
     "through2": "^2.0.0",
     "webpack-core": "^0.6.8",
