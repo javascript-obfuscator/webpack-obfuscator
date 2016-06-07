@@ -1,6 +1,5 @@
 "use strict";
-const JavaScriptObfuscator = require('javascript-obfuscator');
-let multimatch = require('multimatch'), RawSource = require('webpack-core/lib/RawSource');
+let JavaScriptObfuscator = require('javascript-obfuscator'), multimatch = require('multimatch'), RawSource = require('webpack-core/lib/RawSource');
 class WebpackObfuscator {
     constructor(options, excludes) {
         this.options = {};
