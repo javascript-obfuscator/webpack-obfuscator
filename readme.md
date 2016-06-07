@@ -1,5 +1,7 @@
 #javascript-obfuscator plugin for Webpack
 
+##Required Node.js v6.0.0+
+
 ###Installation
 
 Install the package with NPM and add it to your devDependencies:
