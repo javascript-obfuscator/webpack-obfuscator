@@ -1,9 +1,6 @@
 "use strict";
 
-declare let module: any;
-declare let require: any;
-
-import * as JavaScriptObfuscator from 'javascript-obfuscator';
+import { JavaScriptObfuscator } from 'javascript-obfuscator';
 
 let multimatch: any = require('multimatch'),
     RawSource: any = require('webpack-core/lib/RawSource');

@@ -7,5 +7,9 @@
     "experimentalDecorators": true,
     "removeComments": true,
     "noImplicitAny": false
-  }
+  },
+  "exclude": [
+    "typings/browser",
+    "typings/browser.d.ts"
+  ]
 }
