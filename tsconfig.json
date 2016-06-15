@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES5",
     "module": "commonjs",
     "sourceMap": false,
     "emitDecoratorMetadata": true,

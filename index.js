@@ -1,39 +1,42 @@
 "use strict";
-let JavaScriptObfuscator = require('javascript-obfuscator'), multimatch = require('multimatch'), RawSource = require('webpack-core/lib/RawSource');
-class WebpackObfuscator {
-    constructor(options, excludes) {
+var JavaScriptObfuscator = require('javascript-obfuscator'), multimatch = require('multimatch'), RawSource = require('webpack-core/lib/RawSource');
+var WebpackObfuscator = (function () {
+    function WebpackObfuscator(options, excludes) {
         this.options = {};
         this.PLUGIN_NAME = 'webpack-obfuscator';
         this.options = options;
         this.excludes = typeof excludes === 'string' ? [excludes] : excludes || [];
     }
-    apply(compiler) {
-        compiler.plugin('compilation', (compilation) => {
-            compilation.plugin("optimize-chunk-assets", (chunks, callback) => {
-                let files = [];
-                chunks.forEach((chunk) => {
-                    chunk['files'].forEach((file) => {
+    WebpackObfuscator.prototype.apply = function (compiler) {
+        var _this = this;
+        compiler.plugin('compilation', function (compilation) {
+            compilation.plugin("optimize-chunk-assets", function (chunks, callback) {
+                var files = [];
+                chunks.forEach(function (chunk) {
+                    chunk['files'].forEach(function (file) {
                         files.push(file);
                     });
                 });
-                compilation.additionalChunkAssets.forEach((file) => {
+                compilation.additionalChunkAssets.forEach(function (file) {
                     files.push(file);
                 });
-                files.forEach((file) => {
-                    let asset = compilation.assets[file];
-                    compilation.assets[file] = new RawSource(JavaScriptObfuscator.obfuscate(asset.source(), this.options));
+                files.forEach(function (file) {
+                    var asset = compilation.assets[file];
+                    compilation.assets[file] = new RawSource(JavaScriptObfuscator.obfuscate(asset.source(), _this.options));
                 });
                 callback();
             });
         });
-    }
-    shouldExclude(filePath, excludes) {
-        for (let exclude of excludes) {
+    };
+    WebpackObfuscator.prototype.shouldExclude = function (filePath, excludes) {
+        for (var _i = 0, excludes_1 = excludes; _i < excludes_1.length; _i++) {
+            var exclude = excludes_1[_i];
             if (multimatch(filePath, exclude).length > 0) {
                 return true;
             }
         }
         return false;
-    }
-}
+    };
+    return WebpackObfuscator;
+}());
 module.exports = WebpackObfuscator;
