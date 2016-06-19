@@ -22,17 +22,19 @@
     "multimatch": "^2.0.0",
     "through2": "^2.0.0",
     "webpack-core": "^0.6.8",
-    "typescript": "^1.8.10"
+    "typescript": "^1.8.10",
+    "typings": "^0.8.1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sanex3339/webpack-obfuscator.git"
   },
   "scripts": {
+    "start": "concurrent \"npm run tsc:w\" \"npm run lite\" ",
+    "lite": "lite-server",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
-    "lite": "lite-server",
-    "start": "concurrent \"npm run tsc:w\" \"npm run lite\" "
+    "typings": "node_modules/.bin/typings install"
   },
   "author": {
     "name": "Timofey Kachalov"
