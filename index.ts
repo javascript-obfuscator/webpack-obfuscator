@@ -38,6 +38,10 @@ class WebpackObfuscator {
                 });
 
                 files.forEach((file) => {
+                    if (this.shouldExclude(file, this.excludes)) {
+                        return;
+                    }
+
                     let asset = compilation.assets[file],
                         obfuscationResult: any = JavaScriptObfuscator.obfuscate(
                             asset.source(),
