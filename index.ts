@@ -42,9 +42,13 @@ class WebpackObfuscator {
                         return;
                     }
 
-                    let asset = compilation.assets[file];
+                    let asset = compilation.assets[file],
+                        obfuscationResult: any = JavaScriptObfuscator.obfuscate(
+                            asset.source(),
+                            this.options
+                        );
 
-                    compilation.assets[file] = new RawSource(JavaScriptObfuscator.obfuscate(asset.source(), this.options));
+                    compilation.assets[file] = new RawSource(obfuscationResult.toString());
                 });
 
                 callback();
