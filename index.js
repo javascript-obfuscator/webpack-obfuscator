@@ -24,8 +24,8 @@ var WebpackObfuscator = (function () {
                     if (_this.shouldExclude(file, _this.excludes)) {
                         return;
                     }
-                    var asset = compilation.assets[file];
-                    compilation.assets[file] = new RawSource(JavaScriptObfuscator.obfuscate(asset.source(), _this.options));
+                    var asset = compilation.assets[file], obfuscationResult = JavaScriptObfuscator.obfuscate(asset.source(), _this.options);
+                    compilation.assets[file] = new RawSource(obfuscationResult.toString());
                 });
                 callback();
             });
