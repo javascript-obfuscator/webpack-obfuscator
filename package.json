@@ -15,6 +15,7 @@
   "main": "index.js",
   "dependencies": {
     "javascript-obfuscator": "^0.7.0-dev.3",
+    "multi-stage-sourcemap": "^0.2.1",
     "multimatch": "^2.0.0",
     "webpack-core": "^0.6.8"
   },
