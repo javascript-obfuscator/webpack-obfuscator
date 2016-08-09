@@ -1,6 +1,6 @@
 {
   "name": "webpack-obfuscator",
-  "version": "0.7.0-dev.3",
+  "version": "0.7.0-dev.4",
   "description": "javascript-obfuscator plugin for Webpack",
   "keywords": [
     "obfuscator",
@@ -20,8 +20,11 @@
     "webpack-core": "^0.6.8"
   },
   "devDependencies": {
-    "typescript": "^1.8.10",
-    "typings": "^0.8.1"
+    "@types/javascript-obfuscator": "0.0.1",
+    "@types/node": "^6.0.32",
+    "typescript": "^2.0.0",
+    "typings": "^0.8.1",
+    "webpack": "^2.1.0-beta.20"
   },
   "repository": {
     "type": "git",
@@ -30,7 +33,8 @@
   "scripts": {
     "tsc": "tsc",
     "tsc:w": "tsc -w",
-    "typings": "node_modules/.bin/typings install"
+    "typings": "node_modules/.bin/typings install",
+    "test": "$(npm bin)/webpack --config test/config/webpack.config.js"
   },
   "author": {
     "name": "Timofey Kachalov"

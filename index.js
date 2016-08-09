@@ -4,7 +4,7 @@ var WebpackObfuscator = (function () {
     function WebpackObfuscator(options, excludes) {
         this.options = {};
         this.PLUGIN_NAME = 'webpack-obfuscator';
-        this.options = options;
+        this.options = options || {};
         this.excludes = typeof excludes === 'string' ? [excludes] : excludes || [];
     }
     WebpackObfuscator.prototype.apply = function (compiler) {
@@ -24,8 +24,7 @@ var WebpackObfuscator = (function () {
                     if (_this.shouldExclude(file, _this.excludes)) {
                         return;
                     }
-                    var asset = compilation.assets[file];
-                    var input, inputSourceMap;
+                    var asset = compilation.assets[file], input, inputSourceMap;
                     if (_this.options.sourceMap !== false) {
                         if (asset.sourceAndMap) {
                             var sourceAndMap = asset.sourceAndMap();
@@ -45,9 +44,11 @@ var WebpackObfuscator = (function () {
                     }
                     var obfuscationResult = JavaScriptObfuscator.obfuscate(input, _this.options);
                     if (_this.options.sourceMap) {
-                        var obfuscationSourceMap = obfuscationResult.getSourceMap();
-                        var transferedSourceMap = transferSourceMap({ fromSourceMap: obfuscationSourceMap, toSourceMap: inputSourceMap });
-                        compilation.assets[file] = new SourceMapSource(obfuscationResult.toString(), file, JSON.parse(transferedSourceMap), asset.source(), inputSourceMap);
+                        var obfuscationSourceMap = obfuscationResult.getSourceMap(), transferredSourceMap = transferSourceMap({
+                            fromSourceMap: obfuscationSourceMap,
+                            toSourceMap: inputSourceMap
+                        });
+                        compilation.assets[file] = new SourceMapSource(obfuscationResult.toString(), file, JSON.parse(transferredSourceMap), asset.source(), inputSourceMap);
                     }
                     else {
                         compilation.assets[file] = new RawSource(obfuscationResult.toString());

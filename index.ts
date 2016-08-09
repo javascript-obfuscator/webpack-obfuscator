@@ -1,6 +1,6 @@
 "use strict";
 
-let JavaScriptObfuscator = require('javascript-obfuscator'),
+let JavaScriptObfuscator: any = require('javascript-obfuscator'),
     multimatch: any = require('multimatch'),
     RawSource: any = require('webpack-core/lib/RawSource'),
     SourceMapSource: any = require("webpack-core/lib/SourceMapSource"),
@@ -17,7 +17,7 @@ class WebpackObfuscator {
      * @param excludes
      */
     constructor (options: any, excludes: string|string[]) {
-        this.options = options;
+        this.options = options || {};
         this.excludes = typeof excludes === 'string' ? [excludes] : excludes || [];
     }
 
@@ -43,8 +43,10 @@ class WebpackObfuscator {
                     if (this.shouldExclude(file, this.excludes)) {
                         return;
                     }
-                    let asset = compilation.assets[file];
-                    let input, inputSourceMap;
+
+                    let asset = compilation.assets[file],
+                        input, inputSourceMap;
+
                     if (this.options.sourceMap !== false) {
                     	if (asset.sourceAndMap) {
                     		let sourceAndMap = asset.sourceAndMap();
@@ -54,24 +56,35 @@ class WebpackObfuscator {
                     		inputSourceMap = asset.map();
                     		input = asset.source();
                     	}
-                      if (inputSourceMap) {
-                        this.options.sourceMap = true;
-                      }
+
+                        if (inputSourceMap) {
+                            this.options.sourceMap = true;
+                        }
                     } else {
                     	input = asset.source();
                     }
 
                     let obfuscationResult: any = JavaScriptObfuscator.obfuscate(
-                            input,
-                            this.options
-                        );
+                        input,
+                        this.options
+                    );
+
                     if (this.options.sourceMap) {
-                      let obfuscationSourceMap: any = obfuscationResult.getSourceMap();
-                      let transferedSourceMap: any = transferSourceMap({fromSourceMap: obfuscationSourceMap, toSourceMap: inputSourceMap});
-                      compilation.assets[file] = new SourceMapSource(obfuscationResult.toString(), file, JSON.parse(transferedSourceMap), asset.source(), inputSourceMap);
-                    }
-                    else {
-                      compilation.assets[file] = new RawSource(obfuscationResult.toString());
+                        let obfuscationSourceMap: any = obfuscationResult.getSourceMap(),
+                            transferredSourceMap: any = transferSourceMap({
+                                fromSourceMap: obfuscationSourceMap,
+                                toSourceMap: inputSourceMap
+                            });
+
+                        compilation.assets[file] = new SourceMapSource(
+                            obfuscationResult.toString(),
+                            file,
+                            JSON.parse(transferredSourceMap),
+                            asset.source(),
+                            inputSourceMap
+                        );
+                    } else {
+                        compilation.assets[file] = new RawSource(obfuscationResult.toString());
                     }
                 });
 

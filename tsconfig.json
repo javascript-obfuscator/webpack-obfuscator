@@ -6,9 +6,14 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "removeComments": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "types": [
+      "javascript-obfuscator",
+      "node"
+    ]
   },
   "exclude": [
+    "test",
     "node_modules",
     "typings/browser",
     "typings/browser.d.ts"
