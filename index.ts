@@ -1,16 +1,14 @@
 "use strict";
 
 let JavaScriptObfuscator: any = require('javascript-obfuscator'),
+    RawSource: any = require("webpack-sources").RawSource,
+    SourceMapSource: any = require("webpack-sources").SourceMapSource,
     multimatch: any = require('multimatch'),
-    RawSource: any = require('webpack-core/lib/RawSource'),
-    SourceMapSource: any = require("webpack-core/lib/SourceMapSource"),
     transferSourceMap = require("multi-stage-sourcemap").transfer;
 
 class WebpackObfuscator {
     public options: any = {};
     public excludes: string[];
-
-    private PLUGIN_NAME: string = 'webpack-obfuscator';
 
     /**
      * @param options
@@ -40,7 +38,7 @@ class WebpackObfuscator {
                 });
 
                 files.forEach((file) => {
-                    if (this.shouldExclude(file, this.excludes)) {
+                    if (!/\.js($|\?)/i.test(file) || this.shouldExclude(file, this.excludes)) {
                         return;
                     }
 

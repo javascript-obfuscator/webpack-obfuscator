@@ -11,13 +11,13 @@ Install the package with NPM and add it to your devDependencies:
 ### Usage:
 
 ```javascript
-var WebpackObfuscator = require('webpack-obfuscator');
+var JavaScriptObfuscator = require('webpack-obfuscator');
 
 // ...
 
 // webpack plugins array
 plugins: [
-	new WebpackObfuscator({
+	new JavaScriptObfuscator ({
       rotateUnicodeArray: true
   }, ['excluded_bundle_name.js'])
 ],
@@ -33,7 +33,36 @@ Options for [javascript-obfuscator](https://github.com/sanex3339/javascript-obfu
 ### excludes
 Type: `Array` or `String` Default: `[]`
 
-Examples: `['excluded_bundle_name.js', '**_bundle_name.js']` or `'excluded_bundle_name.js'`
+Bundle name is output file name after webpack compilation. With multiple webpack entries you can set bundle name in `output` object with aliases `[name]` or `[id]`.
+
+Syntax for excludes array is syntax for [multimatch](https://github.com/sindresorhus/multimatch) package. You can see examples on package page.
+
+Few syntax examples: `['excluded_bundle_name.js', '**_bundle_name.js'] or 'excluded_bundle_name.js'`
+
+
+Example:
+```
+// webpack.config.js
+'use strict';
+
+const JavaScriptObfuscator = require('webpack-obfuscator');
+
+module.exports = {
+    entry: {
+        'abc': './test/input/index.js',
+        'cde': './test/input/index1.js'
+    },
+    output: {
+        path: 'dist',
+        filename: '[name].js' // output: abc.js, cde.js
+    },
+    plugins: [
+        new JavaScriptObfuscator({
+            rotateUnicodeArray: true
+        }, ['abc.js'])
+    ]
+};
+```
 
 Can be used to bypass obfuscation of some files.
 

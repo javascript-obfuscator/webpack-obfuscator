@@ -16,21 +16,22 @@
   "dependencies": {
     "javascript-obfuscator": "^0.7.2",
     "multi-stage-sourcemap": "^0.2.1",
-    "multimatch": "^2.1.0",
-    "webpack-core": "^0.6.8"
+    "multimatch": "^2.1.0"
   },
   "devDependencies": {
     "@types/javascript-obfuscator": "0.0.1",
     "@types/node": "^6.0.32",
     "typescript": "^2.0.0",
     "typings": "^0.8.1",
-    "webpack": "^2.1.0-beta.20"
+    "webpack": "^2.1.0-beta.25"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sanex3339/webpack-obfuscator.git"
   },
   "scripts": {
+    "build": "npm run tsc",
+    "watch": "npm run tsc:w",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "typings": "node_modules/.bin/typings install",

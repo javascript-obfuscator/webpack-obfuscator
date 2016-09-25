@@ -1,23 +1,25 @@
 'use strict';
 
+const webpack = require('webpack');
 const JavaScriptObfuscator = require('../../index');
 
 module.exports = {
     entry: {
-        'index': './test/input/index.js'
+        'index': './test/input/index.js',
+        'index1': './test/input/index1.js'
     },
     devtool: 'source-map',
     target: 'web',
     resolve: {
-        extensions: ['', '.js']
+        extensions: ['.js']
     },
     plugins: [
         new JavaScriptObfuscator({
             disableConsoleOutput: false
-        })
+        }, ['index1*'])
     ],
     output: {
         path: 'test/output',
-        filename: 'output.js'
+        filename: '[name].js'
     }
 };

@@ -1,9 +1,8 @@
 "use strict";
-var JavaScriptObfuscator = require('javascript-obfuscator'), multimatch = require('multimatch'), RawSource = require('webpack-core/lib/RawSource'), SourceMapSource = require("webpack-core/lib/SourceMapSource"), transferSourceMap = require("multi-stage-sourcemap").transfer;
+var JavaScriptObfuscator = require('javascript-obfuscator'), RawSource = require("webpack-sources").RawSource, SourceMapSource = require("webpack-sources").SourceMapSource, multimatch = require('multimatch'), transferSourceMap = require("multi-stage-sourcemap").transfer;
 var WebpackObfuscator = (function () {
     function WebpackObfuscator(options, excludes) {
         this.options = {};
-        this.PLUGIN_NAME = 'webpack-obfuscator';
         this.options = options || {};
         this.excludes = typeof excludes === 'string' ? [excludes] : excludes || [];
     }
@@ -21,7 +20,7 @@ var WebpackObfuscator = (function () {
                     files.push(file);
                 });
                 files.forEach(function (file) {
-                    if (_this.shouldExclude(file, _this.excludes)) {
+                    if (!/\.js($|\?)/i.test(file) || _this.shouldExclude(file, _this.excludes)) {
                         return;
                     }
                     var asset = compilation.assets[file], input, inputSourceMap;
