@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sanex3339/webpack-obfuscator.git"
+    "url": "git+https://github.com/javascript-obfuscator/webpack-obfuscator.git"
   },
   "scripts": {
     "build": "npm run tsc",
