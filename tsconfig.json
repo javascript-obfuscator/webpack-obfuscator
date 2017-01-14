@@ -8,7 +8,6 @@
     "removeComments": true,
     "noImplicitAny": false,
     "types": [
-      "javascript-obfuscator",
       "node"
     ]
   },
