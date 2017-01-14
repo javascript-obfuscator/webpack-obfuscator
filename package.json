@@ -1,6 +1,6 @@
 {
   "name": "webpack-obfuscator",
-  "version": "0.8.0-beta.2",
+  "version": "0.8.6",
   "description": "javascript-obfuscator plugin for Webpack",
   "keywords": [
     "obfuscator",
@@ -14,7 +14,7 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "javascript-obfuscator": "beta",
+    "javascript-obfuscator": "^0.8.6",
     "multi-stage-sourcemap": "^0.2.1",
     "multimatch": "^2.1.0"
   },
@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sanex3339/webpack-obfuscator.git"
+    "url": "git+https://github.com/javascript-obfuscator/webpack-obfuscator.git"
   },
   "scripts": {
     "build": "npm run tsc",

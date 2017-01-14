@@ -26,7 +26,7 @@ plugins: [
 ### obfuscatorOptions
 Type: `Object` Default: `null`
 
-Options for [javascript-obfuscator](https://github.com/sanex3339/javascript-obfuscator). Should be passed exactly like described on their page.
+Options for [javascript-obfuscator](https://github.com/javascript-obfuscator/javascript-obfuscator). Should be passed exactly like described on their page.
 
 **Warning:** right now plugin not supported `souceMap` and `souceMapMode` options!
 
