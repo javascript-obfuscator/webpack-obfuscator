@@ -20,6 +20,7 @@ var WebpackObfuscator = (function () {
                     files.push(file);
                 });
                 files.forEach(function (file) {
+                    console.log('FILENAME',file);
                     if (!/\.js($|\?)/i.test(file) || _this.shouldExclude(file, _this.excludes)) {
                         return;
                     }
