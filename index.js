@@ -20,7 +20,7 @@ var WebpackObfuscator = (function () {
                     files.push(file);
                 });
                 files.forEach(function (file) {
-                    if (!/\.js($|\?)/i.test(file)  || _this.shouldExclude(file, _this.excludes)) {
+                    if (!/\.js($|\?)/i.test(file) || _this.shouldExclude(file, _this.excludes)) {
                         return;
                     }
                     var asset = compilation.assets[file], input, inputSourceMap;
