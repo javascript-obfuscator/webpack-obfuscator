@@ -1,4 +1,4 @@
-#javascript-obfuscator plugin for Webpack
+# javascript-obfuscator plugin for Webpack
 
 [![npm version](https://badge.fury.io/js/webpack-obfuscator.svg)](https://badge.fury.io/js/webpack-obfuscator)
 
