@@ -19,7 +19,7 @@ module.exports = {
         }, ['index1*'])
     ],
     output: {
-        path: 'test/output',
+        path: __dirname + 'test/output',
         filename: '[name].js'
     }
 };

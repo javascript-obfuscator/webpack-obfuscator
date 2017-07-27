@@ -3,3 +3,4 @@ node_modules
 npm-debug.log
 *.js.map
 test/output
+yarn.lock
