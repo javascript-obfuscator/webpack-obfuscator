@@ -1,6 +1,6 @@
 {
   "name": "webpack-obfuscator",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "javascript-obfuscator plugin for Webpack",
   "keywords": [
     "obfuscator",
@@ -14,7 +14,7 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "javascript-obfuscator": "0.10.0",
+    "javascript-obfuscator": "0.10.1",
     "multi-stage-sourcemap": "0.2.1",
     "multimatch": "2.1.0"
   },
