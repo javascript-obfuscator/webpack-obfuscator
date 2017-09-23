@@ -58,13 +58,10 @@ var WebpackObfuscator = (function () {
         });
     };
     WebpackObfuscator.prototype.shouldExclude = function (filePath, excludes) {
-        for (var _i = 0, excludes_1 = excludes; _i < excludes_1.length; _i++) {
-            var exclude = excludes_1[_i];
-            if (multimatch(filePath, exclude).length > 0) {
-                return true;
-            }
-        }
-        return false;
+            let found = excludes.find(excl=>{
+                return (excl.test(filePath))
+            })
+            return (typeof found=='object')
     };
     return WebpackObfuscator;
 }());
