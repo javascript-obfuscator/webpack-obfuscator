@@ -1,5 +1,10 @@
 "use strict";
-var JavaScriptObfuscator = require('javascript-obfuscator'), RawSource = require("webpack-sources").RawSource, SourceMapSource = require("webpack-sources").SourceMapSource, multimatch = require('multimatch'), transferSourceMap = require("multi-stage-sourcemap").transfer;
+Object.defineProperty(exports, "__esModule", { value: true });
+var JavaScriptObfuscator = require('javascript-obfuscator');
+var RawSource = require("webpack-sources").RawSource;
+var SourceMapSource = require("webpack-sources").SourceMapSource;
+var multimatch = require('multimatch');
+var transferSourceMap = require("multi-stage-sourcemap").transfer;
 var WebpackObfuscator = (function () {
     function WebpackObfuscator(options, excludes) {
         this.options = {};
@@ -58,13 +63,7 @@ var WebpackObfuscator = (function () {
         });
     };
     WebpackObfuscator.prototype.shouldExclude = function (filePath, excludes) {
-        for (var _i = 0, excludes_1 = excludes; _i < excludes_1.length; _i++) {
-            var exclude = excludes_1[_i];
-            if (multimatch(filePath, exclude).length > 0) {
-                return true;
-            }
-        }
-        return false;
+        return multimatch(filePath, excludes).length > 0;
     };
     return WebpackObfuscator;
 }());

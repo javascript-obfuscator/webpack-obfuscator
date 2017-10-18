@@ -1,28 +1,39 @@
 "use strict";
 
-let JavaScriptObfuscator: any = require('javascript-obfuscator'),
-    RawSource: any = require("webpack-sources").RawSource,
-    SourceMapSource: any = require("webpack-sources").SourceMapSource,
-    multimatch: any = require('multimatch'),
-    transferSourceMap = require("multi-stage-sourcemap").transfer;
+import { Compiler } from 'webpack';
+
+const JavaScriptObfuscator = require('javascript-obfuscator');
+const RawSource = require("webpack-sources").RawSource;
+const SourceMapSource = require("webpack-sources").SourceMapSource;
+const multimatch = require('multimatch');
+const transferSourceMap = require("multi-stage-sourcemap").transfer;
+
+type TObject = {[key: string]: any};
 
 class WebpackObfuscator {
-    public options: any = {};
+    /**
+     * @type {TObject}
+     */
+    public options: TObject = {};
+
+    /**
+     * @type {string}
+     */
     public excludes: string[];
 
     /**
-     * @param options
-     * @param excludes
+     * @param {TObject} options
+     * @param {string | string[]} excludes
      */
-    constructor (options: any, excludes: string|string[]) {
+    constructor (options: TObject, excludes: string|string[]) {
         this.options = options || {};
         this.excludes = typeof excludes === 'string' ? [excludes] : excludes || [];
     }
 
     /**
-     * @param compiler
+     * @param {Compiler} compiler
      */
-    public apply (compiler: any): void {
+    public apply (compiler: Compiler): void {
         compiler.plugin('compilation', (compilation: any) => {
             compilation.plugin("optimize-chunk-assets", (chunks: any[], callback: () => void) => {
                 let files = [];
@@ -97,13 +108,7 @@ class WebpackObfuscator {
      * @returns {boolean}
      */
     private shouldExclude (filePath: string, excludes: string[]): boolean {
-        for (let exclude of excludes) {
-            if (multimatch(filePath, exclude).length > 0) {
-                return true;
-            }
-        }
-
-        return false;
+        return multimatch(filePath, excludes).length > 0
     }
 }
 
