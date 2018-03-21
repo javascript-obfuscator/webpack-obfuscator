@@ -14,13 +14,13 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "@types/webpack": "3.0.14",
     "javascript-obfuscator": "0.14.3",
     "multi-stage-sourcemap": "0.2.1",
     "multimatch": "2.1.0"
   },
   "devDependencies": {
     "@types/node": "8.0.47",
+    "@types/webpack": "3.0.14",
     "typescript": "2.6.1",
     "typings": "2.1.1",
     "webpack": "3.8.1"
