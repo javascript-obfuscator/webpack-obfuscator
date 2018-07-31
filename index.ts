@@ -27,7 +27,7 @@ class WebpackObfuscator {
      */
     constructor (options: TObject, excludes: string|string[]) {
         this.options = options || {};
-        this.excludes = typeof excludes === 'string' ? [excludes] : excludes || [];
+        this.excludes = this.prepareExcludes(excludes);
     }
 
     /**
@@ -100,6 +100,18 @@ class WebpackObfuscator {
                 callback();
             });
         });
+    }
+
+    private prepareExcludes(inputExcludes: string|string[]): string[] {
+        if (Array.isArray(inputExcludes)) {
+            return inputExcludes;
+        }
+
+        if (typeof inputExcludes === 'string') {
+            return [inputExcludes];
+        }
+
+        return [];
     }
 
     /**
