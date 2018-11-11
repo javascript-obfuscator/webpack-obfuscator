@@ -4,6 +4,8 @@
 
 ### Installation
 
+test
+
 Install the package with NPM and add it to your devDependencies:
 
 `npm install --save-dev webpack-obfuscator`
