@@ -13,8 +13,8 @@ var WebpackObfuscator = (function () {
     }
     WebpackObfuscator.prototype.apply = function (compiler) {
         var _this = this;
-        compiler.plugin('compilation', function (compilation) {
-            compilation.plugin("optimize-chunk-assets", function (chunks, callback) {
+        compiler.hooks.compilation.tap('WebpackObfuscator', function (compilation) {
+            compilation.hooks.optimizeChunkAssets.tap('WebpackObfuscator', function (chunks) {
                 var files = [];
                 chunks.forEach(function (chunk) {
                     chunk['files'].forEach(function (file) {
@@ -58,7 +58,6 @@ var WebpackObfuscator = (function () {
                         compilation.assets[file] = new RawSource(obfuscationResult.toString());
                     }
                 });
-                callback();
             });
         });
     };
