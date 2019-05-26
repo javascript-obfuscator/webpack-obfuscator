@@ -36,7 +36,7 @@ class WebpackObfuscator {
     public apply (compiler: Compiler): void {
         compiler.plugin('compilation', (compilation: any) => {
             compilation.plugin("optimize-chunk-assets", (chunks: any[], callback: () => void) => {
-                let files = [];
+                let files: any[] = [];
 
                 chunks.forEach((chunk) => {
                     chunk['files'].forEach((file) => {
