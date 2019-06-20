@@ -124,4 +124,4 @@ class WebpackObfuscator {
     }
 }
 
-module.exports = WebpackObfuscator;
+export default WebpackObfuscator;
