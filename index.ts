@@ -25,7 +25,7 @@ class WebpackObfuscator {
      * @param {TObject} options
      * @param {string | string[]} excludes
      */
-    constructor (options: TObject, excludes: string|string[]) {
+    constructor (options?: TObject, excludes?: string|string[]) {
         this.options = options || {};
         this.excludes = this.prepareExcludes(excludes);
     }
