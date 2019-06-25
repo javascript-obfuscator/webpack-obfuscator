@@ -1,11 +1,11 @@
 "use strict";
 
 import { Compiler, compilation } from 'webpack';
-import { JavaScriptObfuscator } from 'javascript-obfuscator';
-import { IOptions as JavaScriptObfuscatorOptions } from 'javascript-obfuscator/src/interfaces/options/IOptions';
+import JavaScriptObfuscator from 'javascript-obfuscator';
 import { RawSource, SourceMapSource } from 'webpack-sources';
 import multimatch from 'multimatch';
 import { RawSourceMap } from 'source-map';
+import { TInputOptions as JavascriptObfuscatorOptions } from 'javascript-obfuscator/src/types/options/TInputOptions';
 const transferSourceMap = require("multi-stage-sourcemap").transfer;
 
 class WebpackObfuscator {
@@ -13,10 +13,9 @@ class WebpackObfuscator {
     public excludes: string[] = [];
 
     constructor(
-        public options: Partial<JavaScriptObfuscatorOptions>,
+        public options: JavascriptObfuscatorOptions,
         excludes?: string | string[]
     ) {
-        this.options = options;
         this.excludes = this.excludes.concat(excludes || []);
     }
 
@@ -28,14 +27,13 @@ class WebpackObfuscator {
                 'and the obfuscator can interfere with each other and break the build');
             return;
         }
-
+        
         const pluginName = this.constructor.name;
         compiler.hooks.emit.tap(pluginName, (compilation: compilation.Compilation) => {
             for (const fileName in compilation.assets) {
                 if (!fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
                     return;
                 }
-
                 const asset = compilation.assets[fileName]
                 const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
                 const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource);
@@ -66,8 +64,8 @@ class WebpackObfuscator {
 
     private extractSourceAndSourceMap(asset: any): { inputSource: string, inputSourceMap: RawSourceMap } {
         if (asset.sourceAndMap) {
-            const { inputSource, inputSourceMap } = asset.sourceAndMap();
-            return { inputSource, inputSourceMap };
+            const { source, map } = asset.sourceAndMap();
+            return { inputSource: source, inputSourceMap: map };
         } else {
             return {
                 inputSource: asset.source(),
@@ -77,14 +75,14 @@ class WebpackObfuscator {
     }
 
     private obfuscate(javascript: string): { obfuscatedSource: string, obfuscationSourceMap: string } {
-        //use any here, as the JavaScriptObfuscator seem to get this one wrong
-        const obfuscationResult: any = JavaScriptObfuscator.obfuscate(
+        console.log('js', javascript);
+        const obfuscationResult = JavaScriptObfuscator.obfuscate(
             javascript,
             this.options
         );
 
         return {
-            obfuscatedSource: obfuscationResult.toString(),
+            obfuscatedSource: obfuscationResult.getObfuscatedCode(),
             obfuscationSourceMap: obfuscationResult.getSourceMap()
         }
     }
