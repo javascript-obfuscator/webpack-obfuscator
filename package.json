@@ -37,9 +37,9 @@
     },
     "scripts": {
         "setup": "npm install",
-        "build": "npm run tsc",
-        "watch": "npm run tsc -w",
-        "test": "npm run webpack --config test/config/webpack.config.js"
+        "build": "npx tsc",
+        "watch": "npx tsc -w",
+        "test": "npx webpack --config test/config/webpack.config.js",
     },
     "author": {
         "name": "Timofey Kachalov"

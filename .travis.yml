@@ -1,5 +1,8 @@
 language: nodejs
 
+before_install:
+  - npm i -g npm@latest
+
 before_script:
   - npm run setup
   - npm run build
@@ -8,4 +11,4 @@ script:
   - npm run test
 
 after_success:
-  - .push-build.sh
+  - ./push-build.sh
