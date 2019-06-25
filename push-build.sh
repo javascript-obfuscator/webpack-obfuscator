@@ -4,6 +4,7 @@ git config --global user.email "travis@travis-ci.org"
 git config --global user.name "Travis CI"
 
 git checkout -b master
+sed -i '/dist/d' .gitignore
 git add dist/*
 git commit --message "Travis build: $TRAVIS_BUILD_NUMBER"
 
