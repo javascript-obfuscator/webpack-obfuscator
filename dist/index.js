@@ -56,7 +56,6 @@ class WebpackObfuscator {
         }
     }
     obfuscate(javascript) {
-        console.log('js', javascript);
         const obfuscationResult = javascript_obfuscator_1.default.obfuscate(javascript, this.options);
         return {
             obfuscatedSource: obfuscationResult.getObfuscatedCode(),
