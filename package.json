@@ -29,12 +29,9 @@
         "url": "git+https://github.com/javascript-obfuscator/webpack-obfuscator.git"
     },
     "scripts": {
-        "build": "npm run tsc",
-        "watch": "npm run tsc:w",
-        "tsc": "tsc",
-        "tsc:w": "tsc -w",
-        "typings": "node_modules/.bin/typings install",
-        "test": "$(npm bin)/webpack --config test/config/webpack.config.js"
+        "build": "npx tsc",
+        "watch": "npx tsc -w",
+        "test": "npx webpack --config test/config/webpack.config.js"
     },
     "author": {
         "name": "Timofey Kachalov"
