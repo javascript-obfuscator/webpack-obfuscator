@@ -21,8 +21,15 @@ class WebpackObfuscator {
     }
 
     public apply(compiler: Compiler): void {
-        const pluginName = this.constructor.name;
+        const isDevServer = process.argv.find(v => v.includes('webpack-dev-server'));
+        if (isDevServer) {
+            console.info(
+                'JavascriptObfuscator is disabled on webpack-dev-server as the reloading scripts ',
+                'and the obfuscator can interfere with each other and break the build');
+            return;
+        }
 
+        const pluginName = this.constructor.name;
         compiler.hooks.emit.tap(pluginName, (compilation: compilation.Compilation) => {
             for (const fileName in compilation.assets) {
                 if (fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
