@@ -1,20 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES5",
+    "target": "ES6",
+    "lib": ["ES6"],
     "module": "commonjs",
     "sourceMap": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "removeComments": true,
-    "noImplicitAny": false,
-    "types": [
-      "node"
-    ]
-  },
-  "exclude": [
-    "test",
-    "node_modules",
-    "typings/browser",
-    "typings/browser.d.ts"
-  ]
+    "esModuleInterop": true,
+    "strict": true,
+    "declaration": true,
+    "outDir": "./dist"
+  }
 }

@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - "8"
+
+before_script:
+  - npm run setup
+  - npm run build
+
+script:
+  - npm run test
+
+after_success:
+  - git config --global user.email "travis@travis-ci.org"
+  - git config --global user.name "Travis CI"
+  - git checkout -b dist
+  - git add -f "dist/*"
+  - git commit -m "Travis Build - $TRAVIS_COMMIT" -m "[skip ci]"
+  - git remote rm origin
+  - git remote add origin https://${GH_USERNAME}:${GH_TOKEN}@github.com/${GH_REPOUSER}/webpack-obfuscator.git > /dev/null 2>&1
+  - git push origin dist:master

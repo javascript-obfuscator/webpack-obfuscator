@@ -1,6 +1,6 @@
 'use strict';
 
-const JavaScriptObfuscator = require('../../index');
+const JavaScriptObfuscator = require('../../dist/index');
 
 module.exports = {
     entry: {
