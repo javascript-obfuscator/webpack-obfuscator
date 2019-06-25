@@ -1,0 +1,11 @@
+language: nodejs
+
+before_script:
+  - npm run setup
+  - npm run build
+
+script:
+  - npm run test-only
+
+after_success:
+  - .push-build.sh
