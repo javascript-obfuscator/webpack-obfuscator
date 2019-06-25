@@ -32,12 +32,12 @@ class WebpackObfuscator {
                 const asset = compilation.assets[fileName]
                 const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
                 const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource);
-                
+
                 if (this.options.sourceMap && inputSourceMap) {
-                        const transferredSourceMap = transferSourceMap({
-                            fromSourceMap: obfuscationSourceMap,
-                            toSourceMap: inputSource
-                        });
+                    const transferredSourceMap = transferSourceMap({
+                        fromSourceMap: obfuscationSourceMap,
+                        toSourceMap: inputSource
+                    });
 
                     compilation.assets[fileName] = new SourceMapSource(
                         obfuscatedSource,
@@ -69,7 +69,7 @@ class WebpackObfuscator {
         }
     }
 
-    private obfuscate(javascript: string): {obfuscatedSource: string, obfuscationSourceMap: string} {
+    private obfuscate(javascript: string): { obfuscatedSource: string, obfuscationSourceMap: string } {
         //use any here, as the JavaScriptObfuscator seem to get this one wrong
         const obfuscationResult: any = JavaScriptObfuscator.obfuscate(
             javascript,
