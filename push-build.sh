@@ -3,7 +3,7 @@
 git config --global user.email "travis@travis-ci.org"
 git config --global user.name "Travis CI"
 
-git add dist/*
+git add -f dist/*
 git commit -m "Travis Build: $TRAVIS_BUILD_NUMBER" -m "[skip ci]"
 
 git remote rm origin
