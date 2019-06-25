@@ -9,5 +9,6 @@
     "removeComments": true,
     "esModuleInterop": true,
     "strict": true,
+    "declaration": true
   }
 }
