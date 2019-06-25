@@ -27,7 +27,8 @@
         "@types/webpack-sources": "^0.1.5",
         "source-map": "^0.6.1",
         "typescript": "^3.5.2",
-        "webpack": "^4.35.0"
+        "webpack": "^4.35.0",
+        "webpack-cli": "^3.3.5"
     },
     "repository": {
         "type": "git",
