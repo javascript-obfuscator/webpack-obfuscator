@@ -1,44 +1,43 @@
 {
-  "name": "webpack-obfuscator",
-  "version": "0.18.0",
-  "description": "javascript-obfuscator plugin for Webpack",
-  "keywords": [
-    "obfuscator",
-    "obfuscation",
-    "uglify",
-    "crush",
-    "code protection",
-    "javascript obfuscator",
-    "js obfuscator",
-    "webpack obfuscator"
-  ],
-  "main": "index.js",
-  "dependencies": {
-    "javascript-obfuscator": "0.18.0",
-    "multi-stage-sourcemap": "0.2.1",
-    "multimatch": "2.1.0"
-  },
-  "devDependencies": {
-    "@types/node": "8.0.47",
-    "@types/webpack": "3.0.14",
-    "typescript": "2.6.1",
-    "typings": "2.1.1",
-    "webpack": "3.8.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/javascript-obfuscator/webpack-obfuscator.git"
-  },
-  "scripts": {
-    "build": "npm run tsc",
-    "watch": "npm run tsc:w",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
-    "typings": "node_modules/.bin/typings install",
-    "test": "$(npm bin)/webpack --config test/config/webpack.config.js"
-  },
-  "author": {
-    "name": "Timofey Kachalov"
-  },
-  "license": "BSD-2-Clause"
+    "name": "webpack-obfuscator",
+    "version": "0.18.0",
+    "description": "javascript-obfuscator plugin for Webpack",
+    "keywords": [
+        "obfuscator",
+        "obfuscation",
+        "uglify",
+        "crush",
+        "code protection",
+        "javascript obfuscator",
+        "js obfuscator",
+        "webpack obfuscator"
+    ],
+    "main": "index.js",
+    "dependencies": {
+        "javascript-obfuscator": "0.18.1",
+        "multi-stage-sourcemap": "0.2.1",
+        "multimatch": "2.1.0"
+    },
+    "devDependencies": {
+        "@types/node": "8.0.47",
+        "@types/webpack": "^4.4.34",
+        "typescript": "^3.5.2",
+        "webpack": "^4.35.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/javascript-obfuscator/webpack-obfuscator.git"
+    },
+    "scripts": {
+        "build": "npm run tsc",
+        "watch": "npm run tsc:w",
+        "tsc": "tsc",
+        "tsc:w": "tsc -w",
+        "typings": "node_modules/.bin/typings install",
+        "test": "$(npm bin)/webpack --config test/config/webpack.config.js"
+    },
+    "author": {
+        "name": "Timofey Kachalov"
+    },
+    "license": "BSD-2-Clause"
 }
