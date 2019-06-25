@@ -12,7 +12,8 @@
         "js obfuscator",
         "webpack obfuscator"
     ],
-    "main": "index.js",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "dependencies": {
         "javascript-obfuscator": "0.18.1",
         "multi-stage-sourcemap": "^0.2.1",
@@ -35,9 +36,11 @@
         "url": "git+https://github.com/javascript-obfuscator/webpack-obfuscator.git"
     },
     "scripts": {
+        "setup": "npm install",
         "build": "npx tsc",
         "watch": "npx tsc -w",
-        "test": "npx webpack --config test/config/webpack.config.js"
+        "test-only": "npx webpack --config test/config/webpack.config.js",
+        "test": "npm run test"
     },
     "author": {
         "name": "Timofey Kachalov"
