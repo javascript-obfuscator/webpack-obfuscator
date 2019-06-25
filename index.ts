@@ -75,7 +75,6 @@ class WebpackObfuscator {
     }
 
     private obfuscate(javascript: string): { obfuscatedSource: string, obfuscationSourceMap: string } {
-        console.log('js', javascript);
         const obfuscationResult = JavaScriptObfuscator.obfuscate(
             javascript,
             this.options
