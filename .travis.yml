@@ -12,7 +12,7 @@ script:
 after_success:
   - git config --global user.email "travis@travis-ci.org"
   - git config --global user.name "Travis CI"
-  - git branch dist
+  - git checkput -b dist
   - git add -f "dist/*"
   - git commit -m "Travis Build - $TRAVIS_BUILD_NUMBER" -m "[skip ci]"
   - git remote rm origin
