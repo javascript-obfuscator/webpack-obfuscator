@@ -15,6 +15,11 @@ var WebpackObfuscator = (function () {
     }
     WebpackObfuscator.prototype.apply = function (compiler) {
         var _this = this;
+        var isDevServer = process.argv.find(function (v) { return v.includes('webpack-dev-server'); });
+        if (isDevServer) {
+            console.info('JavascriptObfuscator is disabled on webpack-dev-server as the reloading scripts ', 'and the obfuscator can interfere with each other and break the build');
+            return;
+        }
         var pluginName = this.constructor.name;
         compiler.hooks.emit.tap(pluginName, function (compilation) {
             for (var fileName in compilation.assets) {
