@@ -32,7 +32,7 @@ class WebpackObfuscator {
         const pluginName = this.constructor.name;
         compiler.hooks.emit.tap(pluginName, (compilation: compilation.Compilation) => {
             for (const fileName in compilation.assets) {
-                if (fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
+                if (!fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
                     return;
                 }
 
