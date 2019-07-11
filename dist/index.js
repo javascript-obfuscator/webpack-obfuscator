@@ -7,7 +7,7 @@ const webpack_sources_1 = require("webpack-sources");
 const multimatch_1 = __importDefault(require("multimatch"));
 const transferSourceMap = require("multi-stage-sourcemap").transfer;
 class WebpackObfuscator {
-    constructor(options, excludes) {
+    constructor(options = {}, excludes) {
         this.options = options;
         this.excludes = [];
         this.excludes = this.excludes.concat(excludes || []);

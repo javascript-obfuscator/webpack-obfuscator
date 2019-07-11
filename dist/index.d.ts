@@ -3,7 +3,7 @@ import { TInputOptions as JavascriptObfuscatorOptions } from 'javascript-obfusca
 declare class WebpackObfuscator {
     options: JavascriptObfuscatorOptions;
     excludes: string[];
-    constructor(options: JavascriptObfuscatorOptions, excludes?: string | string[]);
+    constructor(options?: JavascriptObfuscatorOptions, excludes?: string | string[]);
     apply(compiler: Compiler): void;
     private shouldExclude;
     private extractSourceAndSourceMap;

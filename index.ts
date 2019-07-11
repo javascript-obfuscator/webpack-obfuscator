@@ -13,7 +13,7 @@ class WebpackObfuscator {
     public excludes: string[] = [];
 
     constructor(
-        public options: JavascriptObfuscatorOptions,
+        public options: JavascriptObfuscatorOptions = {},
         excludes?: string | string[]
     ) {
         this.excludes = this.excludes.concat(excludes || []);

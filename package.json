@@ -1,6 +1,6 @@
 {
     "name": "webpack-obfuscator",
-    "version": "0.18.2",
+    "version": "0.18.3",
     "description": "javascript-obfuscator plugin for Webpack",
     "keywords": [
         "obfuscator",
