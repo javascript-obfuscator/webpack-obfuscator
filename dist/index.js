@@ -20,24 +20,26 @@ class WebpackObfuscator {
         }
         const pluginName = this.constructor.name;
         compiler.hooks.emit.tap(pluginName, (compilation) => {
-            for (const fileName in compilation.assets) {
-                if (!fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
-                    return;
-                }
-                const asset = compilation.assets[fileName];
-                const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
-                const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource);
-                if (this.options.sourceMap && inputSourceMap) {
-                    const transferredSourceMap = transferSourceMap({
-                        fromSourceMap: obfuscationSourceMap,
-                        toSourceMap: inputSource
-                    });
-                    compilation.assets[fileName] = new webpack_sources_1.SourceMapSource(obfuscatedSource, fileName, transferredSourceMap, inputSource, inputSourceMap);
-                }
-                else {
-                    compilation.assets[fileName] = new webpack_sources_1.RawSource(obfuscatedSource);
-                }
-            }
+            compilation.chunks.forEach(chunk => {
+                chunk.files.forEach((fileName) => {
+                    if (!fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
+                        return;
+                    }
+                    const asset = compilation.assets[fileName];
+                    const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
+                    const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource);
+                    if (this.options.sourceMap && inputSourceMap) {
+                        const transferredSourceMap = transferSourceMap({
+                            fromSourceMap: obfuscationSourceMap,
+                            toSourceMap: inputSource
+                        });
+                        compilation.assets[fileName] = new webpack_sources_1.SourceMapSource(obfuscatedSource, fileName, transferredSourceMap, inputSource, inputSourceMap);
+                    }
+                    else {
+                        compilation.assets[fileName] = new webpack_sources_1.RawSource(obfuscatedSource);
+                    }
+                });
+            });
         });
     }
     shouldExclude(filePath) {

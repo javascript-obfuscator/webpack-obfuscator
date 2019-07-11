@@ -27,34 +27,36 @@ class WebpackObfuscator {
                 'and the obfuscator can interfere with each other and break the build');
             return;
         }
-        
+
         const pluginName = this.constructor.name;
         compiler.hooks.emit.tap(pluginName, (compilation: compilation.Compilation) => {
-            for (const fileName in compilation.assets) {
-                if (!fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
-                    return;
-                }
-                const asset = compilation.assets[fileName]
-                const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
-                const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource);
+            compilation.chunks.forEach(chunk => {
+                chunk.files.forEach((fileName: string) => {
+                    if (!fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
+                        return;
+                    }
+                    const asset = compilation.assets[fileName]
+                    const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
+                    const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource);
 
-                if (this.options.sourceMap && inputSourceMap) {
-                    const transferredSourceMap = transferSourceMap({
-                        fromSourceMap: obfuscationSourceMap,
-                        toSourceMap: inputSource
-                    });
+                    if (this.options.sourceMap && inputSourceMap) {
+                        const transferredSourceMap = transferSourceMap({
+                            fromSourceMap: obfuscationSourceMap,
+                            toSourceMap: inputSource
+                        });
 
-                    compilation.assets[fileName] = new SourceMapSource(
-                        obfuscatedSource,
-                        fileName,
-                        transferredSourceMap,
-                        inputSource,
-                        inputSourceMap
-                    );
-                } else {
-                    compilation.assets[fileName] = new RawSource(obfuscatedSource);
-                }
-            }
+                        compilation.assets[fileName] = new SourceMapSource(
+                            obfuscatedSource,
+                            fileName,
+                            transferredSourceMap,
+                            inputSource,
+                            inputSourceMap
+                        );
+                    } else {
+                        compilation.assets[fileName] = new RawSource(obfuscatedSource);
+                    }
+                });
+            });
         });
     }
 
