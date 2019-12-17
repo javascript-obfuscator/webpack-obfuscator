@@ -31,7 +31,7 @@ class WebpackObfuscator {
                     if (this.options.sourceMap && inputSourceMap) {
                         const transferredSourceMap = transferSourceMap({
                             fromSourceMap: obfuscationSourceMap,
-                            toSourceMap: inputSource
+                            toSourceMap: inputSourceMap
                         });
                         compilation.assets[fileName] = new webpack_sources_1.SourceMapSource(obfuscatedSource, fileName, transferredSourceMap, inputSource, inputSourceMap);
                     }
