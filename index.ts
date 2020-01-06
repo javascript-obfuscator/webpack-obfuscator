@@ -1,11 +1,10 @@
 "use strict";
 
 import { Compiler, compilation } from 'webpack';
-import JavaScriptObfuscator from 'javascript-obfuscator';
+import JavaScriptObfuscator, { ObfuscatorOptions } from 'javascript-obfuscator';
 import { RawSource, SourceMapSource } from 'webpack-sources';
 import multimatch from 'multimatch';
 import { RawSourceMap } from 'source-map';
-import { TInputOptions as JavascriptObfuscatorOptions } from 'javascript-obfuscator/src/types/options/TInputOptions';
 const transferSourceMap = require("multi-stage-sourcemap").transfer;
 
 class WebpackObfuscator {
@@ -13,7 +12,7 @@ class WebpackObfuscator {
     public excludes: string[] = [];
 
     constructor(
-        public options: JavascriptObfuscatorOptions = {},
+        public options: ObfuscatorOptions = {},
         excludes?: string | string[]
     ) {
         this.excludes = this.excludes.concat(excludes || []);

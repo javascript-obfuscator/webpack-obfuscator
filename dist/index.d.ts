@@ -1,9 +1,9 @@
 import { Compiler } from 'webpack';
-import { TInputOptions as JavascriptObfuscatorOptions } from 'javascript-obfuscator/src/types/options/TInputOptions';
+import { ObfuscatorOptions } from 'javascript-obfuscator';
 declare class WebpackObfuscator {
-    options: JavascriptObfuscatorOptions;
+    options: ObfuscatorOptions;
     excludes: string[];
-    constructor(options?: JavascriptObfuscatorOptions, excludes?: string | string[]);
+    constructor(options?: ObfuscatorOptions, excludes?: string | string[]);
     apply(compiler: Compiler): void;
     private shouldExclude;
     private extractSourceAndSourceMap;
