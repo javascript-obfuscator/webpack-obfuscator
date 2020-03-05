@@ -8,6 +8,10 @@ import { RawSourceMap } from 'source-map';
 const transferSourceMap = require("multi-stage-sourcemap").transfer;
 
 class WebpackObfuscator {
+    /**
+     * @type {string}
+     */
+    private static readonly baseIdentifiersPrefix: string = 'a';
 
     public excludes: string[] = [];
 
@@ -28,7 +32,10 @@ class WebpackObfuscator {
         }
 
         const pluginName = this.constructor.name;
+
         compiler.hooks.emit.tap(pluginName, (compilation: compilation.Compilation) => {
+            let identifiersPrefixCounter: number = 0;
+
             compilation.chunks.forEach(chunk => {
                 chunk.files.forEach((fileName: string) => {
                     if (!fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
@@ -36,7 +43,7 @@ class WebpackObfuscator {
                     }
                     const asset = compilation.assets[fileName]
                     const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
-                    const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource);
+                    const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource, identifiersPrefixCounter);
 
                     if (this.options.sourceMap && inputSourceMap) {
                         const transferredSourceMap = transferSourceMap({
@@ -54,6 +61,8 @@ class WebpackObfuscator {
                     } else {
                         compilation.assets[fileName] = new RawSource(obfuscatedSource);
                     }
+
+                    identifiersPrefixCounter++;
                 });
             });
         });
@@ -75,10 +84,16 @@ class WebpackObfuscator {
         }
     }
 
-    private obfuscate(javascript: string): { obfuscatedSource: string, obfuscationSourceMap: string } {
+    private obfuscate(
+        javascript: string,
+        identifiersPrefixCounter: number
+    ): { obfuscatedSource: string, obfuscationSourceMap: string } {
         const obfuscationResult = JavaScriptObfuscator.obfuscate(
             javascript,
-            this.options
+            {
+                identifiersPrefix: `${WebpackObfuscator.baseIdentifiersPrefix}${identifiersPrefixCounter}`,
+                ...this.options
+            }
         );
 
         return {

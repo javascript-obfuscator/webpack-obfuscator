@@ -20,6 +20,7 @@ class WebpackObfuscator {
         }
         const pluginName = this.constructor.name;
         compiler.hooks.emit.tap(pluginName, (compilation) => {
+            let identifiersPrefixCounter = 0;
             compilation.chunks.forEach(chunk => {
                 chunk.files.forEach((fileName) => {
                     if (!fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
@@ -27,7 +28,7 @@ class WebpackObfuscator {
                     }
                     const asset = compilation.assets[fileName];
                     const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
-                    const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource);
+                    const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource, identifiersPrefixCounter);
                     if (this.options.sourceMap && inputSourceMap) {
                         const transferredSourceMap = transferSourceMap({
                             fromSourceMap: obfuscationSourceMap,
@@ -38,6 +39,7 @@ class WebpackObfuscator {
                     else {
                         compilation.assets[fileName] = new webpack_sources_1.RawSource(obfuscatedSource);
                     }
+                    identifiersPrefixCounter++;
                 });
             });
         });
@@ -57,12 +59,13 @@ class WebpackObfuscator {
             };
         }
     }
-    obfuscate(javascript) {
-        const obfuscationResult = javascript_obfuscator_1.default.obfuscate(javascript, this.options);
+    obfuscate(javascript, identifiersPrefixCounter) {
+        const obfuscationResult = javascript_obfuscator_1.default.obfuscate(javascript, Object.assign({ identifiersPrefix: `${WebpackObfuscator.baseIdentifiersPrefix}${identifiersPrefixCounter}` }, this.options));
         return {
             obfuscatedSource: obfuscationResult.getObfuscatedCode(),
             obfuscationSourceMap: obfuscationResult.getSourceMap()
         };
     }
 }
+WebpackObfuscator.baseIdentifiersPrefix = 'a';
 module.exports = WebpackObfuscator;
