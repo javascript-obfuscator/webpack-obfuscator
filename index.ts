@@ -35,32 +35,34 @@ class WebpackObfuscator {
 
         compiler.hooks.emit.tap(pluginName, (compilation: compilation.Compilation) => {
             let identifiersPrefixCounter: number = 0;
-
+            let sourcemap_output: {[index:string]: string} = {};
             compilation.chunks.forEach(chunk => {
                 chunk.files.forEach((fileName: string) => {
+                    if (this.options.sourceMap && fileName.toLowerCase().endsWith('.map')) {
+                        let src_name = fileName.toLowerCase().substr(0, fileName.length-4);
+                        if (!this.shouldExclude(src_name)) {
+                            const transferredSourceMap = transferSourceMap({
+                                fromSourceMap: sourcemap_output[src_name],
+                                toSourceMap: compilation.assets[fileName].source()
+                            });
+                            let final_sourcemap = JSON.parse(transferredSourceMap);
+                            final_sourcemap['sourcesContent'] = JSON.parse(compilation.assets[fileName].source())['sourcesContent'];
+                            compilation.assets[fileName] = new RawSource(JSON.stringify(final_sourcemap));
+                        }
+                        return;
+                    }
                     if (!fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
                         return;
                     }
                     const asset = compilation.assets[fileName]
                     const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
-                    const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource, identifiersPrefixCounter);
+                    const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource, fileName, identifiersPrefixCounter);
 
                     if (this.options.sourceMap && inputSourceMap) {
-                        const transferredSourceMap = transferSourceMap({
-                            fromSourceMap: obfuscationSourceMap,
-                            toSourceMap: inputSourceMap
-                        });
-
-                        compilation.assets[fileName] = new SourceMapSource(
-                            obfuscatedSource,
-                            fileName,
-                            transferredSourceMap,
-                            inputSource,
-                            inputSourceMap
-                        );
-                    } else {
-                        compilation.assets[fileName] = new RawSource(obfuscatedSource);
+                        sourcemap_output[fileName] = obfuscationSourceMap;
                     }
+                    compilation.assets[fileName] = new RawSource(obfuscatedSource);
+                    
 
                     identifiersPrefixCounter++;
                 });
@@ -86,12 +88,14 @@ class WebpackObfuscator {
 
     private obfuscate(
         javascript: string,
+        fileName: string,
         identifiersPrefixCounter: number
     ): { obfuscatedSource: string, obfuscationSourceMap: string } {
         const obfuscationResult = JavaScriptObfuscator.obfuscate(
             javascript,
             {
                 identifiersPrefix: `${WebpackObfuscator.baseIdentifiersPrefix}${identifiersPrefixCounter}`,
+                sourceMapFileName: fileName + '.map',
                 ...this.options
             }
         );
