@@ -14,7 +14,9 @@ module.exports = {
     },
     plugins: [
         new JavaScriptObfuscator({
-            disableConsoleOutput: false
+            disableConsoleOutput: false,
+            sourceMap: true,
+            sourceMapMode: 'separate'
         }, ['index-excluded*'])
     ],
     output: {
