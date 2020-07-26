@@ -37,7 +37,7 @@ rules: [
         ],
         enforce: 'post',
         use: { 
-            loader: 'obfuscator-loader', 
+            loader: 'webpack-obfuscator/loader', 
             options: {
                 rotateStringArray: true
             }
