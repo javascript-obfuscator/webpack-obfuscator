@@ -1,79 +1,117 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const javascript_obfuscator_1 = __importDefault(require("javascript-obfuscator"));
-const webpack_sources_1 = require("webpack-sources");
-const multimatch_1 = __importDefault(require("multimatch"));
+
+import { Compiler, compilation } from 'webpack';
+import JavaScriptObfuscator, { ObfuscatorOptions } from 'javascript-obfuscator';
+import { RawSource } from 'webpack-sources';
+import multimatch from 'multimatch';
+import { RawSourceMap } from 'source-map';
 const transferSourceMap = require("multi-stage-sourcemap").transfer;
-class WebpackObfuscator {
-    constructor(options = {}, excludes) {
-        this.options = options;
-        this.excludes = [];
+
+/**
+ * JavaScript Obfuscator plugin
+ */
+export class WebpackObfuscatorPlugin {
+    /**
+     * @type {string}
+     */
+    private static readonly baseIdentifiersPrefix: string = 'a';
+
+    public excludes: string[] = [];
+
+    constructor(
+        public options: ObfuscatorOptions = {},
+        excludes?: string | string[]
+    ) {
         this.excludes = this.excludes.concat(excludes || []);
     }
-    apply(compiler) {
+
+    public apply(compiler: Compiler): void {
         const isDevServer = process.argv.find(v => v.includes('webpack-dev-server'));
+
         if (isDevServer) {
-            console.info('JavascriptObfuscator is disabled on webpack-dev-server as the reloading scripts ', 'and the obfuscator can interfere with each other and break the build');
+            console.info(
+                'JavascriptObfuscator is disabled on webpack-dev-server as the reloading scripts ',
+                'and the obfuscator can interfere with each other and break the build');
             return;
         }
+
         const pluginName = this.constructor.name;
-        compiler.hooks.emit.tap(pluginName, (compilation) => {
-            let identifiersPrefixCounter = 0;
-            const sourcemapOutput = {};
+
+        compiler.hooks.emit.tap(pluginName, (compilation: compilation.Compilation) => {
+            let identifiersPrefixCounter: number = 0;
+            const sourcemapOutput: {[index:string]: string} = {};
+
             compilation.chunks.forEach(chunk => {
-                chunk.files.forEach((fileName) => {
+                chunk.files.forEach((fileName: string) => {
                     if (this.options.sourceMap && fileName.toLowerCase().endsWith('.map')) {
                         let srcName = fileName.toLowerCase().substr(0, fileName.length - 4);
+
                         if (!this.shouldExclude(srcName)) {
                             const transferredSourceMap = transferSourceMap({
                                 fromSourceMap: sourcemapOutput[srcName],
                                 toSourceMap: compilation.assets[fileName].source()
                             });
                             const finalSourcemap = JSON.parse(transferredSourceMap);
+
                             finalSourcemap['sourcesContent'] = JSON.parse(compilation.assets[fileName].source())['sourcesContent'];
-                            compilation.assets[fileName] = new webpack_sources_1.RawSource(JSON.stringify(finalSourcemap));
+                            compilation.assets[fileName] = new RawSource(JSON.stringify(finalSourcemap));
                         }
+
                         return;
                     }
+
                     if (!fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
                         return;
                     }
-                    const asset = compilation.assets[fileName];
+
+                    const asset = compilation.assets[fileName]
                     const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
                     const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource, fileName, identifiersPrefixCounter);
+
                     if (this.options.sourceMap && inputSourceMap) {
                         sourcemapOutput[fileName] = obfuscationSourceMap;
                     }
-                    compilation.assets[fileName] = new webpack_sources_1.RawSource(obfuscatedSource);
+
+                    compilation.assets[fileName] = new RawSource(obfuscatedSource);
                     identifiersPrefixCounter++;
                 });
             });
         });
     }
-    shouldExclude(filePath) {
-        return multimatch_1.default(filePath, this.excludes).length > 0;
+
+    private shouldExclude(filePath: string): boolean {
+        return multimatch(filePath, this.excludes).length > 0
     }
-    extractSourceAndSourceMap(asset) {
+
+    private extractSourceAndSourceMap(asset: any): { inputSource: string, inputSourceMap: RawSourceMap } {
         if (asset.sourceAndMap) {
             const { source, map } = asset.sourceAndMap();
             return { inputSource: source, inputSourceMap: map };
-        }
-        else {
+        } else {
             return {
                 inputSource: asset.source(),
                 inputSourceMap: asset.map()
-            };
+            }
         }
     }
-    obfuscate(javascript, fileName, identifiersPrefixCounter) {
-        const obfuscationResult = javascript_obfuscator_1.default.obfuscate(javascript, Object.assign({ identifiersPrefix: `${WebpackObfuscator.baseIdentifiersPrefix}${identifiersPrefixCounter}`, sourceMapFileName: fileName + '.map' }, this.options));
+
+    private obfuscate(
+        javascript: string,
+        fileName: string,
+        identifiersPrefixCounter: number
+    ): { obfuscatedSource: string, obfuscationSourceMap: string } {
+        const obfuscationResult = JavaScriptObfuscator.obfuscate(
+            javascript,
+            {
+                identifiersPrefix: `${WebpackObfuscatorPlugin.baseIdentifiersPrefix}${identifiersPrefixCounter}`,
+                sourceMapFileName: fileName + '.map',
+                ...this.options
+            }
+        );
+
         return {
             obfuscatedSource: obfuscationResult.getObfuscatedCode(),
             obfuscationSourceMap: obfuscationResult.getSourceMap()
-        };
+        }
     }
 }
-WebpackObfuscator.baseIdentifiersPrefix = 'a';
-module.exports = WebpackObfuscator;

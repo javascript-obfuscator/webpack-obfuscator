@@ -1,4 +1,4 @@
-# javascript-obfuscator plugin for Webpack
+# javascript-obfuscator plugin and loader for Webpack
 
 [![npm version](https://badge.fury.io/js/webpack-obfuscator.svg)](https://badge.fury.io/js/webpack-obfuscator)
 
@@ -8,7 +8,7 @@ Install the package with NPM and add it to your devDependencies:
 
 `npm install --save-dev webpack-obfuscator`
 
-### Usage:
+### Plugin usage:
 
 ```javascript
 var JavaScriptObfuscator = require('webpack-obfuscator');
@@ -17,9 +17,32 @@ var JavaScriptObfuscator = require('webpack-obfuscator');
 
 // webpack plugins array
 plugins: [
-	new JavaScriptObfuscator ({
-      rotateStringArray: true
-  }, ['excluded_bundle_name.js'])
+    new JavaScriptObfuscator ({
+        rotateStringArray: true
+    }, ['excluded_bundle_name.js'])
+]
+```
+
+### Loader usage:
+
+Define a rule in your webpack config and use the obfuscator-loader as the last of your loaders for your modules. You can add the **enforce: 'post'** flag to ensure the loader will be called after normal loaders:
+
+```javascript
+// webpack loader rules array
+rules: [
+    {
+        test: /\.js$/,
+        exclude: [ 
+            path.resolve(__dirname, 'excluded_file_name.js') 
+        ],
+        enforce: 'post',
+        use: { 
+            loader: 'obfuscator-loader', 
+            options: {
+                rotateStringArray: true
+            }
+        }
+    }
 ]
 ```
 
@@ -30,7 +53,7 @@ Options for [javascript-obfuscator](https://github.com/javascript-obfuscator/jav
 
 **Warning:** right now plugin does not support `sourceMap` and `sourceMapMode` options!
 
-### excludes
+### excludes (plugin only)
 Type: `Array` or `String` Default: `[]`
 
 Bundle name is output file name after webpack compilation. With multiple webpack entries you can set bundle name in `output` object with aliases `[name]` or `[id]`.
