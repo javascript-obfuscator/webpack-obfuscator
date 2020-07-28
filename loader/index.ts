@@ -29,10 +29,10 @@ class WebpackObfuscatorLoaderHelper {
 
         estraverse.traverse(astTree, {
             enter: (node: ESTree.Node): void => {
-                if (WebpackObfuscatorLoaderHelper.isRequire(node) && node.range) {
+                if (WebpackObfuscatorLoaderHelper.isRequire(node) && node.start && node.end) {
                     entries.push({
-                        start: node.range[0],
-                        end: node.range[1],
+                        start: node.start,
+                        end: node.end,
                     });
                 }
             }
