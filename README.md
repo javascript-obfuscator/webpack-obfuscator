@@ -11,13 +11,13 @@ Install the package with NPM and add it to your devDependencies:
 ### Plugin usage:
 
 ```javascript
-var JavaScriptObfuscator = require('webpack-obfuscator');
+var WebpackObfuscator = require('webpack-obfuscator');
 
 // ...
 
 // webpack plugins array
 plugins: [
-    new JavaScriptObfuscator ({
+    new WebpackObfuscator ({
         rotateStringArray: true
     }, ['excluded_bundle_name.js'])
 ]
@@ -28,6 +28,8 @@ plugins: [
 Define a rule in your webpack config and use the obfuscator-loader as the last of your loaders for your modules. You can add the **enforce: 'post'** flag to ensure the loader will be called after normal loaders:
 
 ```javascript
+var WebpackObfuscator = require('webpack-obfuscator');
+
 // webpack loader rules array
 rules: [
     {
@@ -37,7 +39,7 @@ rules: [
         ],
         enforce: 'post',
         use: { 
-            loader: 'webpack-obfuscator/loader', 
+            loader: WebpackObfuscator.loader, 
             options: {
                 rotateStringArray: true
             }

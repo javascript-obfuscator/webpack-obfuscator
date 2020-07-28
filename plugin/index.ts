@@ -14,6 +14,11 @@ export class WebpackObfuscatorPlugin {
     /**
      * @type {string}
      */
+    public static readonly loader = require.resolve('../loader');
+
+    /**
+     * @type {string}
+     */
     private static readonly baseIdentifiersPrefix: string = 'a';
 
     public excludes: string[] = [];

@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const WebpackObfuscatorPlugin = require('../../dist/index');
 
 module.exports = {
     entry: {
@@ -16,7 +17,7 @@ module.exports = {
                     path.resolve(__dirname, '../input/index-excluded')
                 ],
                 use: {
-                    loader: path.resolve(__dirname, '../../dist/loader'),
+                    loader: WebpackObfuscatorPlugin.loader,
                     options: {
                         disableConsoleOutput: false,
                         sourceMap: true,

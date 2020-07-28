@@ -1,6 +1,6 @@
 'use strict';
 
-const JavaScriptObfuscator = require('../../dist/index');
+const WebpackObfuscatorPlugin = require('../../dist/index');
 
 module.exports = {
     entry: {
@@ -13,7 +13,7 @@ module.exports = {
         extensions: ['.js']
     },
     plugins: [
-        new JavaScriptObfuscator({
+        new WebpackObfuscatorPlugin({
             disableConsoleOutput: false,
             sourceMap: true,
             sourceMapMode: 'separate'
