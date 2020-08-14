@@ -85,7 +85,10 @@ class WebpackObfuscatorLoaderHelper {
         sourceCode: string,
         sourceType: acorn.Options['sourceType']
     ): ESTree.Program {
-        const config: acorn.Options = {sourceType};
+        const config: acorn.Options = {
+            sourceType,
+            ecmaVersion: 11
+        };
 
         return <any>acorn.parse(sourceCode, config);
     }
