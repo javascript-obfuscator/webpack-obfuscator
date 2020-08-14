@@ -1,6 +1,6 @@
 {
     "name": "webpack-obfuscator",
-    "version": "1.9.0",
+    "version": "1.10.0",
     "description": "javascript-obfuscator plugin for Webpack",
     "keywords": [
         "obfuscator",
@@ -17,7 +17,7 @@
     "dependencies": {
         "acorn": "^7.3.1",
         "estraverse": "^5.1.0",
-        "javascript-obfuscator": "^1.9.0",
+        "javascript-obfuscator": "^1.10.0",
         "loader-utils": "^2.0.0",
         "multi-stage-sourcemap": "^0.3.1",
         "multimatch": "^4.0.0",
