@@ -1,4 +1,4 @@
-# javascript-obfuscator plugin and loader for Webpack@5
+# javascript-obfuscator plugin and loader for Webpack
 
 [![npm version](https://badge.fury.io/js/webpack-obfuscator.svg)](https://badge.fury.io/js/webpack-obfuscator)
 
@@ -6,7 +6,7 @@
 
 Install the package with NPM and add it to your devDependencies:
 
-`npm install --save-dev javascript-obfuscator webpack-obfuscator`
+`npm install --save-dev webpack-obfuscator`
 
 ### Plugin usage:
 

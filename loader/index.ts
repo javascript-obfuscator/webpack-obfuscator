@@ -1,6 +1,6 @@
 "use strict";
 
-import JavaScriptObfuscator, {ObfuscatorOptions} from 'javascript-obfuscator';
+import JavaScriptObfuscator  from 'javascript-obfuscator';
 import estraverse from 'estraverse';
 import * as ESTree from 'estree';
 import loaderUtils from 'loader-utils';
@@ -110,7 +110,7 @@ class WebpackObfuscatorLoaderHelper {
 function Loader (sourceCode: string) {
     // Obfuscates commented source code
     // @ts-ignore
-    const options  = loaderUtils.getOptions<ObfuscatorOptions>(this) || {};
+    const options = loaderUtils.getOptions(this) || {};
     const commentedSourceCode: string = WebpackObfuscatorLoaderHelper.getCommentedSource(sourceCode);
     const obfuscationResult = JavaScriptObfuscator.obfuscate(commentedSourceCode, options);
 

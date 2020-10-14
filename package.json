@@ -1,7 +1,7 @@
 {
     "name": "webpack-obfuscator",
-    "version": "3.0.0-beta.0",
-    "description": "javascript-obfuscator plugin for Webpack@5",
+    "version": "2.6.0",
+    "description": "javascript-obfuscator plugin for Webpack",
     "keywords": [
         "obfuscator",
         "obfuscation",
@@ -15,27 +15,29 @@
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "acorn": "^8.0.4",
+        "acorn": "^8.0.1",
         "estraverse": "^5.2.0",
         "loader-utils": "^2.0.0",
         "multi-stage-sourcemap": "^0.3.1",
-        "multimatch": "^5.0.0",
-        "webpack-sources": "^2.0.1"
+        "multimatch": "^4.0.0",
+        "webpack-sources": "^1.4.3"
     },
     "peerDependencies": {
         "javascript-obfuscator": "^2.6.0",
-        "webpack": "^5.1.0"
+        "webpack": "^4.44.1"
     },
     "devDependencies": {
         "@types/estraverse": "^5.1.0",
         "@types/estree": "0.0.45",
-        "@types/node": "^14.11.8",
-        "@types/webpack-sources": "^2.0.0",
+        "@types/loader-utils": "^2.0.1",
+        "@types/node": "^14.6.4",
+        "@types/webpack": "^4.41.22",
+        "@types/webpack-sources": "^1.4.2",
         "javascript-obfuscator": "^2.6.0",
         "source-map": "^0.7.3",
-        "typescript": "^4.0.3",
-        "webpack": "^5.1.0",
-        "webpack-cli": "^4.0.0"
+        "typescript": "^4.0.2",
+        "webpack": "^4.42.0",
+        "webpack-cli": "^3.3.12"
     },
     "repository": {
         "type": "git",
@@ -45,8 +47,8 @@
         "setup": "npm install",
         "build": "npx tsc",
         "watch": "npx tsc -w",
-        "test:plugin": "npm run build && npx webpack --config test/config/javascript-obfuscator-plugin.config.js",
-        "test:loader": "npm run build && npx webpack --config test/config/javascript-obfuscator-loader.config.js"
+        "test:plugin": "npx webpack --config test/config/javascript-obfuscator-plugin.config.js",
+        "test:loader": "npx webpack --config test/config/javascript-obfuscator-loader.config.js"
     },
     "author": {
         "name": "Timofey Kachalov"
