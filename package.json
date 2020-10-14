@@ -47,8 +47,8 @@
         "setup": "npm install",
         "build": "npx tsc",
         "watch": "npx tsc -w",
-        "test:plugin": "npx webpack --config test/config/javascript-obfuscator-plugin.config.js",
-        "test:loader": "npx webpack --config test/config/javascript-obfuscator-loader.config.js"
+        "test:plugin": "npm run build && npx webpack --config test/config/javascript-obfuscator-plugin.config.js",
+        "test:loader": "npm run build && npx webpack --config test/config/javascript-obfuscator-loader.config.js"
     },
     "author": {
         "name": "Timofey Kachalov"
