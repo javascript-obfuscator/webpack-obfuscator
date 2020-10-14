@@ -1,3 +1,5 @@
+require('./nested');
+
 (function () {
     var test = 1;
 
