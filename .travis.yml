@@ -9,7 +9,8 @@ before_script:
   - npm run build
 
 script:
-  - npm run test
+  - npm run test:plugin
+  - npm run test:loader
 
 after_success:
   - git config --global user.email "travis@travis-ci.org"
