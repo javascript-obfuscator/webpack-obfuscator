@@ -82,9 +82,24 @@ export class WebpackObfuscatorPlugin {
 
                             if (this.options.sourceMap && inputSourceMap) {
                                 sourcemapOutput[fileName] = obfuscationSourceMap;
-                            }
 
-                            assets[fileName] = new sources.RawSource(obfuscatedSource, false);
+                                const transferredSourceMap = transferSourceMap({
+                                    fromSourceMap: obfuscationSourceMap,
+                                    toSourceMap: inputSourceMap
+                                });
+                                const finalSourcemap = JSON.parse(transferredSourceMap);
+                                finalSourcemap['sourcesContent'] = inputSourceMap['sourcesContent'];
+
+                                // @ts-ignore Wrong types
+                                assets[fileName] = new sources.SourceMapSource(
+                                    obfuscatedSource,
+                                    fileName,
+                                    finalSourcemap
+                                );
+
+                            } else {
+                                assets[ fileName ] = new sources.RawSource( obfuscatedSource, false );
+                            }
                             identifiersPrefixCounter++;
                         });
                     });
