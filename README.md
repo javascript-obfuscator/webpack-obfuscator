@@ -53,8 +53,6 @@ Type: `Object` Default: `null`
 
 Options for [javascript-obfuscator](https://github.com/javascript-obfuscator/javascript-obfuscator). Should be passed exactly like described on their page.
 
-**Warning:** right now plugin does not support `sourceMap` and `sourceMapMode` options!
-
 ### excludes (plugin only)
 Type: `Array` or `String` Default: `[]`
 
