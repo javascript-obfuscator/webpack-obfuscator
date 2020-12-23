@@ -96,10 +96,10 @@ export class WebpackObfuscatorPlugin {
                                     fileName,
                                     finalSourcemap
                                 );
-
                             } else {
                                 assets[ fileName ] = new sources.RawSource( obfuscatedSource, false );
                             }
+
                             identifiersPrefixCounter++;
                         });
                     });
