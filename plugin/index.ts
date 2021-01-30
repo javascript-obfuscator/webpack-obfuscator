@@ -16,6 +16,14 @@ export class WebpackObfuscatorPlugin {
     public static readonly loader = require.resolve('../loader');
 
     /**
+     * @type {string[]}
+     */
+    private static allowedExtensions: string[] = [
+        '.js',
+        '.mjs'
+    ];
+
+    /**
      * @type {string}
      */
     private static readonly baseIdentifiersPrefix: string = 'a';
@@ -72,7 +80,11 @@ export class WebpackObfuscatorPlugin {
                                 return;
                             }
 
-                            if (!fileName.toLowerCase().endsWith('.js') || this.shouldExclude(fileName)) {
+                            const isValidExtension = WebpackObfuscatorPlugin
+                                .allowedExtensions
+                                .some((extension: string) => fileName.toLowerCase().endsWith(extension));
+
+                            if (!isValidExtension || this.shouldExclude(fileName)) {
                                 return;
                             }
 
