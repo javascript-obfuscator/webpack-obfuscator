@@ -4,7 +4,9 @@
 
 ### Installation
 
-Install the package with NPM and add it to your devDependencies:
+This plugin requires Webpack@5. If you depend on Webpack@4, please use [version 2](https://github.com/javascript-obfuscator/webpack-obfuscator/tree/2.6.0) of the plugin.
+
+Install the plugin with NPM and add it to your devDependencies:
 
 `npm install --save-dev javascript-obfuscator webpack-obfuscator`
 
