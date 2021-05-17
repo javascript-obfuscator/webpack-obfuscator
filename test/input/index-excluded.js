@@ -10,4 +10,7 @@ require('./nested');
     abc('a');
 
     console.log(test);
+
+    var processEnv = process.env.SOME_VAR;
+    console.log(processEnv);
 })();
