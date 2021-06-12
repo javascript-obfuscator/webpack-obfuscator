@@ -53,7 +53,7 @@ export class WebpackObfuscatorPlugin {
             compilation.hooks.processAssets.tap(
                 {
                     name: 'WebpackObfuscator',
-                    stage: Compilation.PROCESS_ASSETS_STAGE_SUMMARIZE
+                    stage: Compilation.PROCESS_ASSETS_STAGE_DEV_TOOLING
                 },
                 (assets) => {
                     let identifiersPrefixCounter: number = 0;
