@@ -20,8 +20,7 @@ module.exports = {
         }),
         new WebpackObfuscatorPlugin({
             disableConsoleOutput: false,
-            sourceMap: true,
-            sourceMapMode: 'separate'
+            sourceMap: true
         }, ['index-excluded*'])
     ],
     output: {

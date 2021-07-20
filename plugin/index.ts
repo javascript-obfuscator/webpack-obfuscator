@@ -6,6 +6,15 @@ import multimatch from 'multimatch';
 import { RawSourceMap } from 'source-map';
 const transferSourceMap = require("multi-stage-sourcemap").transfer;
 
+export type WebpackObfuscatorOptions = Omit<
+    ObfuscatorOptions,
+    | 'inputFileName'
+    | 'sourceMapBaseUrl'
+    | 'sourceMapFileName'
+    | 'sourceMapMode'
+    | 'sourceMapSourcesMode'
+>;
+
 /**
  * JavaScript Obfuscator plugin
  */
@@ -31,7 +40,7 @@ export class WebpackObfuscatorPlugin {
     public excludes: string[] = [];
 
     constructor(
-        public options: ObfuscatorOptions = {},
+        public options: WebpackObfuscatorOptions = {},
         excludes?: string | string[]
     ) {
         this.excludes = this.excludes.concat(excludes || []);
@@ -145,6 +154,8 @@ export class WebpackObfuscatorPlugin {
             javascript,
             {
                 identifiersPrefix: `${WebpackObfuscatorPlugin.baseIdentifiersPrefix}${identifiersPrefixCounter}`,
+                inputFileName: fileName,
+                sourceMapMode: 'separate',
                 sourceMapFileName: fileName + '.map',
                 ...this.options
             }

@@ -22,7 +22,6 @@ module.exports = {
                     options: {
                         disableConsoleOutput: false,
                         sourceMap: true,
-                        sourceMapMode: 'separate',
                         stringArray: true,
                         stringArrayThreshold: 1
                     }
