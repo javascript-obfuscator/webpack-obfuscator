@@ -1,6 +1,6 @@
 {
     "name": "webpack-obfuscator",
-    "version": "3.4.1",
+    "version": "3.5.0",
     "description": "javascript-obfuscator plugin for Webpack@5",
     "keywords": [
         "obfuscator",
@@ -21,13 +21,13 @@
         "webpack-sources": "^2.0.1"
     },
     "peerDependencies": {
-        "javascript-obfuscator": "^2.8.0",
+        "javascript-obfuscator": "^2.8.0 || ^3.0.0",
         "webpack": "^5.1.0"
     },
     "devDependencies": {
         "@types/node": "^14.11.8",
         "@types/webpack-sources": "^2.0.0",
-        "javascript-obfuscator": "^2.19.0",
+        "javascript-obfuscator": "^3.0.0",
         "source-map": "^0.7.3",
         "typescript": "^4.0.3",
         "webpack": "^5.37.0",
