@@ -92,7 +92,7 @@ module.exports = {
 Can be used to bypass obfuscation of some files.
 
 ### License
-Copyright (C) 2020 [Timofey Kachalov](http://github.com/sanex3339).
+Copyright (C) 2022 [Timofey Kachalov](http://github.com/sanex3339).
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
