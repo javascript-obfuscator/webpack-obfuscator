@@ -70,7 +70,10 @@ export class WebpackObfuscatorPlugin {
 
                     compilation.chunks.forEach(chunk => {
                         chunk.files.forEach((fileName: string) => {
-                            if (this.options.sourceMap && fileName.toLowerCase().endsWith('.map')) {
+                            const isValidMapExtension = WebpackObfuscatorPlugin
+                                .allowedExtensions
+                                .some((extension: string) => fileName.toLowerCase().endsWith(`${extension}.map`));
+                            if (this.options.sourceMap && isValidMapExtension) {
                                 let srcName = fileName.toLowerCase().substr(0, fileName.length - 4);
 
                                 if (!this.shouldExclude(srcName)) {
