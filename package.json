@@ -25,6 +25,7 @@
         "webpack": "^5.1.0"
     },
     "devDependencies": {
+        "@types/multi-stage-sourcemap": "^0.3.0",
         "@types/node": "^14.11.8",
         "@types/webpack-sources": "^2.0.0",
         "javascript-obfuscator": "^4.0.0",
