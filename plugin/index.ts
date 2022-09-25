@@ -4,7 +4,7 @@ import { Compiler, Compilation, sources } from 'webpack';
 import JavaScriptObfuscator, { ObfuscatorOptions } from 'javascript-obfuscator';
 import multimatch from 'multimatch';
 import { RawSourceMap } from 'source-map';
-const transferSourceMap = require("multi-stage-sourcemap").transfer;
+import { transfer as transferSourceMap } from 'multi-stage-sourcemap';
 
 export type WebpackObfuscatorOptions = Omit<
     ObfuscatorOptions,
@@ -76,7 +76,9 @@ export class WebpackObfuscatorPlugin {
                                 if (!this.shouldExclude(srcName)) {
                                     const transferredSourceMap = transferSourceMap({
                                         fromSourceMap: sourcemapOutput[srcName],
-                                        toSourceMap: compilation.assets[fileName].source()
+                                        toSourceMap: compilation.assets[fileName]
+                                            .source()
+                                            .toString(),
                                     });
                                     const finalSourcemap = JSON.parse(transferredSourceMap);
 
