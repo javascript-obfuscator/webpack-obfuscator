@@ -79,10 +79,6 @@ export class WebpackObfuscatorPlugin {
                                         toSourceMap: compilation.assets[fileName].source()
                                     });
                                     const finalSourcemap = JSON.parse(transferredSourceMap);
-
-                                    finalSourcemap['sourcesContent'] = JSON.parse(
-                                        assets[fileName].source().toString()
-                                    )['sourcesContent'];
                                     assets[fileName] = new sources.RawSource(JSON.stringify(finalSourcemap), false);
                                 }
 
@@ -109,7 +105,6 @@ export class WebpackObfuscatorPlugin {
                                     toSourceMap: inputSourceMap
                                 });
                                 const finalSourcemap = JSON.parse(transferredSourceMap);
-                                finalSourcemap['sourcesContent'] = inputSourceMap['sourcesContent'];
 
                                 // @ts-ignore Wrong types
                                 assets[fileName] = new sources.SourceMapSource(
