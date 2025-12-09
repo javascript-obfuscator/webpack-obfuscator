@@ -1,7 +1,7 @@
 "use strict";
 
 import { Compiler, Compilation, sources } from 'webpack';
-import JavaScriptObfuscator, { ObfuscatorOptions } from 'javascript-obfuscator';
+import JavaScriptObfuscator, { ObfuscatorOptions, IProApiConfig, TProApiProgressCallback } from 'javascript-obfuscator';
 import multimatch from 'multimatch';
 import { RawSourceMap } from 'source-map';
 const transferSourceMap = require("multi-stage-sourcemap").transfer;
@@ -14,6 +14,9 @@ export type WebpackObfuscatorOptions = Omit<
     | 'sourceMapMode'
     | 'sourceMapSourcesMode'
 >;
+
+// Re-export types for external use
+export type { IProApiConfig, TProApiProgressCallback };
 
 /**
  * JavaScript Obfuscator plugin
@@ -38,12 +41,18 @@ export class WebpackObfuscatorPlugin {
     private static readonly baseIdentifiersPrefix: string = 'a';
 
     public excludes: string[] = [];
+    public proApiConfig?: IProApiConfig;
+    public onProgress?: TProApiProgressCallback;
 
     constructor(
         public options: WebpackObfuscatorOptions = {},
-        excludes?: string | string[]
+        excludes?: string | string[],
+        proApiConfig?: IProApiConfig,
+        onProgress?: TProApiProgressCallback
     ) {
         this.excludes = this.excludes.concat(excludes || []);
+        this.proApiConfig = proApiConfig;
+        this.onProgress = onProgress;
     }
 
     public apply(compiler: Compiler): void {
@@ -59,66 +68,88 @@ export class WebpackObfuscatorPlugin {
         const pluginName = this.constructor.name;
 
         compiler.hooks.compilation.tap(pluginName, (compilation: Compilation) => {
-            compilation.hooks.processAssets.tap(
+            // Use tapPromise for async processing
+            compilation.hooks.processAssets.tapPromise(
                 {
                     name: 'WebpackObfuscator',
                     stage: Compilation.PROCESS_ASSETS_STAGE_DEV_TOOLING
                 },
-                (assets) => {
+                async (assets) => {
                     let identifiersPrefixCounter: number = 0;
                     const sourcemapOutput: {[index:string]: string} = {};
 
+                    // Collect all files to process
+                    const filesToProcess: Array<{
+                        chunk: any;
+                        fileName: string;
+                        isSourceMap: boolean;
+                    }> = [];
+
                     compilation.chunks.forEach(chunk => {
                         chunk.files.forEach((fileName: string) => {
-                            if (this.options.sourceMap && fileName.toLowerCase().endsWith('.map')) {
-                                let srcName = fileName.toLowerCase().substr(0, fileName.length - 4);
-
-                                if (!this.shouldExclude(srcName)) {
-                                    const transferredSourceMap = transferSourceMap({
-                                        fromSourceMap: sourcemapOutput[srcName],
-                                        toSourceMap: compilation.assets[fileName].source()
-                                    });
-                                    const finalSourcemap = JSON.parse(transferredSourceMap);
-                                    assets[fileName] = new sources.RawSource(JSON.stringify(finalSourcemap), false);
-                                }
-
-                                return;
-                            }
-
-                            const isValidExtension = WebpackObfuscatorPlugin
-                                .allowedExtensions
-                                .some((extension: string) => fileName.toLowerCase().endsWith(extension));
-
-                            if (!isValidExtension || this.shouldExclude(fileName)) {
-                                return;
-                            }
-
-                            const asset = compilation.assets[fileName]
-                            const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
-                            const { obfuscatedSource, obfuscationSourceMap } = this.obfuscate(inputSource, fileName, identifiersPrefixCounter);
-
-                            if (this.options.sourceMap && inputSourceMap) {
-                                sourcemapOutput[fileName] = obfuscationSourceMap;
-
-                                const transferredSourceMap = transferSourceMap({
-                                    fromSourceMap: obfuscationSourceMap,
-                                    toSourceMap: inputSourceMap
-                                });
-                                const finalSourcemap = JSON.parse(transferredSourceMap);
-
-                                // @ts-ignore Wrong types
-                                assets[fileName] = new sources.SourceMapSource(
-                                    obfuscatedSource,
-                                    fileName,
-                                    finalSourcemap
-                                );
-                            } else {
-                                assets[ fileName ] = new sources.RawSource( obfuscatedSource, false );
-                            }
-
-                            identifiersPrefixCounter++;
+                            const isSourceMap = Boolean(this.options.sourceMap) && fileName.toLowerCase().endsWith('.map');
+                            filesToProcess.push({ chunk, fileName, isSourceMap });
                         });
                     });
+
+                    // Process source maps after JS files, so we need to separate them
+                    const jsFiles = filesToProcess.filter(f => !f.isSourceMap);
+                    const mapFiles = filesToProcess.filter(f => f.isSourceMap);
+
+                    // Process JS files first
+                    for (const { fileName } of jsFiles) {
+                        const isValidExtension = WebpackObfuscatorPlugin
+                            .allowedExtensions
+                            .some((extension: string) => fileName.toLowerCase().endsWith(extension));
+
+                        if (!isValidExtension || this.shouldExclude(fileName)) {
+                            continue;
+                        }
+
+                        const asset = compilation.assets[fileName];
+                        const { inputSource, inputSourceMap } = this.extractSourceAndSourceMap(asset);
+
+                        const { obfuscatedSource, obfuscationSourceMap } = await this.obfuscate(
+                            inputSource,
+                            fileName,
+                            identifiersPrefixCounter
+                        );
+
+                        if (this.options.sourceMap && inputSourceMap) {
+                            sourcemapOutput[fileName] = obfuscationSourceMap;
+
+                            const transferredSourceMap = transferSourceMap({
+                                fromSourceMap: obfuscationSourceMap,
+                                toSourceMap: inputSourceMap
+                            });
+                            const finalSourcemap = JSON.parse(transferredSourceMap);
+
+                            // @ts-ignore Wrong types
+                            assets[fileName] = new sources.SourceMapSource(
+                                obfuscatedSource,
+                                fileName,
+                                finalSourcemap
+                            );
+                        } else {
+                            assets[fileName] = new sources.RawSource(obfuscatedSource, false);
+                        }
+
+                        identifiersPrefixCounter++;
+                    }
+
+                    // Process source map files
+                    for (const { fileName } of mapFiles) {
+                        let srcName = fileName.toLowerCase().substr(0, fileName.length - 4);
+
+                        if (!this.shouldExclude(srcName)) {
+                            const transferredSourceMap = transferSourceMap({
+                                fromSourceMap: sourcemapOutput[srcName],
+                                toSourceMap: compilation.assets[fileName].source()
+                            });
+                            const finalSourcemap = JSON.parse(transferredSourceMap);
+                            assets[fileName] = new sources.RawSource(JSON.stringify(finalSourcemap), false);
+                        }
+                    }
                 }
             );
         });
@@ -140,25 +171,42 @@ export class WebpackObfuscatorPlugin {
         }
     }
 
-    private obfuscate(
+    private async obfuscate(
         javascript: string,
         fileName: string,
         identifiersPrefixCounter: number
-    ): { obfuscatedSource: string, obfuscationSourceMap: string } {
-        const obfuscationResult = JavaScriptObfuscator.obfuscate(
-            javascript,
-            {
-                identifiersPrefix: `${WebpackObfuscatorPlugin.baseIdentifiersPrefix}${identifiersPrefixCounter}`,
-                inputFileName: fileName,
-                sourceMapMode: 'separate',
-                sourceMapFileName: fileName + '.map',
-                ...this.options
-            }
-        );
+    ): Promise<{ obfuscatedSource: string, obfuscationSourceMap: string }> {
+        const obfuscatorOptions = {
+            identifiersPrefix: `${WebpackObfuscatorPlugin.baseIdentifiersPrefix}${identifiersPrefixCounter}`,
+            inputFileName: fileName,
+            sourceMapMode: 'separate' as const,
+            sourceMapFileName: fileName + '.map',
+            ...this.options
+        };
 
-        return {
-            obfuscatedSource: obfuscationResult.getObfuscatedCode(),
-            obfuscationSourceMap: obfuscationResult.getSourceMap()
+        // Use obfuscatePro if proApiConfig is provided, otherwise use sync obfuscate
+        if (this.proApiConfig) {
+            const obfuscationResult = await JavaScriptObfuscator.obfuscatePro(
+                javascript,
+                obfuscatorOptions,
+                this.proApiConfig,
+                this.onProgress
+            );
+
+            return {
+                obfuscatedSource: obfuscationResult.getObfuscatedCode(),
+                obfuscationSourceMap: obfuscationResult.getSourceMap()
+            };
+        } else {
+            const obfuscationResult = JavaScriptObfuscator.obfuscate(
+                javascript,
+                obfuscatorOptions
+            );
+
+            return {
+                obfuscatedSource: obfuscationResult.getObfuscatedCode(),
+                obfuscationSourceMap: obfuscationResult.getSourceMap()
+            };
         }
     }
 }

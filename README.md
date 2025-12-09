@@ -36,12 +36,12 @@ var WebpackObfuscator = require('webpack-obfuscator');
 rules: [
     {
         test: /\.js$/,
-        exclude: [ 
-            path.resolve(__dirname, 'excluded_file_name.js') 
+        exclude: [
+            path.resolve(__dirname, 'excluded_file_name.js')
         ],
         enforce: 'post',
-        use: { 
-            loader: WebpackObfuscator.loader, 
+        use: {
+            loader: WebpackObfuscator.loader,
             options: {
                 rotateStringArray: true
             }
@@ -91,8 +91,107 @@ module.exports = {
 
 Can be used to bypass obfuscation of some files.
 
+---
+
+## Pro API Support
+
+The plugin and loader support the [obfuscator.io](https://obfuscator.io) Pro API for cloud-based obfuscation. This allows you to use Virtual Machine-based obfuscation available through the JavaScript Obfuscator Pro API.
+
+### The usage with Pro API
+
+```javascript
+var WebpackObfuscator = require('webpack-obfuscator');
+
+plugins: [
+    new WebpackObfuscator(
+        {
+            // obfuscator options
+            rotateStringArray: true
+        },
+        ['excluded_bundle_name.js'],  // excludes
+        {
+            // Pro API configuration
+            apiToken: 'your-api-token-from-obfuscator.io',
+            timeout: 300000  // optional, request timeout in ms (default: 5 minutes)
+        },
+        (message) => {
+            // optional progress callback
+            console.log('Obfuscation progress:', message);
+        }
+    )
+]
+```
+
+### Loader with Pro API
+
+```javascript
+var WebpackObfuscator = require('webpack-obfuscator');
+
+rules: [
+    {
+        test: /\.js$/,
+        enforce: 'post',
+        use: {
+            loader: WebpackObfuscator.loader,
+            options: {
+                rotateStringArray: true,
+                // Pro API configuration
+                proApiConfig: {
+                    apiToken: 'your-api-token-from-obfuscator.io',
+                    timeout: 300000  // optional
+                },
+                // optional progress callback
+                onProgress: (message) => {
+                    console.log('Obfuscation progress:', message);
+                }
+            }
+        }
+    }
+]
+```
+
+### Pro API Options
+
+#### proApiConfig
+Type: `Object` Default: `undefined`
+
+Configuration object for the Pro API:
+
+| Property | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| `apiToken` | `string` | Yes | - | Your API token from [obfuscator.io](https://obfuscator.io) |
+| `timeout` | `number` | No | `300000` | Request timeout in milliseconds (5 minutes) |
+
+#### onProgress
+Type: `Function` Default: `undefined`
+
+Callback function that receives progress messages during obfuscation.
+
+```typescript
+type TProApiProgressCallback = (message: string) => void;
+```
+
+### TypeScript Support
+
+The plugin exports TypeScript types for Pro API configuration:
+
+```typescript
+import WebpackObfuscator, { IProApiConfig, TProApiProgressCallback } from 'webpack-obfuscator';
+
+const proApiConfig: IProApiConfig = {
+    apiToken: 'your-token',
+    timeout: 60000
+};
+
+const onProgress: TProApiProgressCallback = (message) => {
+    console.log(message);
+};
+```
+
+---
+
 ### License
-Copyright (C) 2022 [Timofey Kachalov](http://github.com/sanex3339).
+Copyright (C) 2025 [Timofey Kachalov](http://github.com/sanex3339).
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
