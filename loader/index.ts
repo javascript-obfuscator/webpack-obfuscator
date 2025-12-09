@@ -34,7 +34,7 @@ function Loader (sourceCode: string) {
         }
     );
 
-    return obfuscationResult.getObfuscatedCode();
+    context.callback(null, obfuscationResult.getObfuscatedCode(), obfuscationResult.getSourceMap());
 }
 
 export = Loader;
