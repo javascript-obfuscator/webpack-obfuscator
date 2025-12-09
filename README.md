@@ -95,7 +95,7 @@ Can be used to bypass obfuscation of some files.
 
 ## Pro API Support
 
-The plugin and loader support the [obfuscator.io](https://obfuscator.io) Pro API for cloud-based obfuscation. This allows you to use Virtual Machine-based obfuscation available through the JavaScript Obfuscator Pro API.
+The plugin and loader support the [obfuscator.io](https://obfuscator.io) Pro API for cloud-based obfuscation (requires [javascript-obfuscator](https://github.com/javascript-obfuscator/javascript-obfuscator) `^5.0.0`). This allows you to use Virtual Machine-based obfuscation available through the JavaScript Obfuscator Pro API.
 
 ### The usage with Pro API
 
