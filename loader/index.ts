@@ -1,7 +1,6 @@
 "use strict";
 
 import JavaScriptObfuscator, {ObfuscatorOptions} from 'javascript-obfuscator';
-import loaderUtils from 'loader-utils';
 import * as path from 'path';
 
 type WebpackObfuscatorOptions = Omit<
@@ -23,7 +22,7 @@ function Loader (sourceCode: string) {
     const relativePathOfModule = path.relative(context.rootContext, context.resourcePath);
 
     // Obfuscates commented source code
-    const options  = loaderUtils.getOptions<WebpackObfuscatorOptions>(context) || {};
+    const options = (context.getOptions() || {}) as WebpackObfuscatorOptions;
     const obfuscationResult = JavaScriptObfuscator.obfuscate(
         sourceCode,
         {
