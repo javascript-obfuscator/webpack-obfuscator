@@ -7,3 +7,4 @@ node_modules
 # include the .d.ts files
 !*.d.ts
 tsconfig.json
+test
