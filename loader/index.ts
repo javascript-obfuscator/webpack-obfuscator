@@ -32,6 +32,15 @@ async function Loader(this: any, sourceCode: string): Promise<void> {
         // Extract proApiConfig and onProgress from options
         const { proApiConfig, onProgress, ...obfuscatorOptions } = options;
 
+        if (obfuscatorOptions.vmObfuscation) {
+            console.warn(
+                '\x1b[33m[webpack-obfuscator] `vmObfuscation` option is heavily not recommended ' +
+                'when used with the loader. Each source file will contain a separate VM runtime, ' +
+                'which significantly increases code size and slows down execution. ' +
+                'Use the webpack-obfuscator plugin instead, which bundles a single VM runtime.\x1b[0m'
+            );
+        }
+
         const finalOptions = {
             ...obfuscatorOptions,
             ignoreRequireImports: true,

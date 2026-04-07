@@ -294,4 +294,44 @@ describe('WebpackObfuscatorLoader', () => {
             expect(output['main.js']).toBeDefined();
         });
     });
+
+    describe('vmObfuscation warning', () => {
+        it('should warn when vmObfuscation option is used', async () => {
+            const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+            const config = createLoaderConfig(
+                { 'main': './index.js' },
+                { vmObfuscation: true }
+            );
+
+            try {
+                await runWebpack(config);
+            } catch {
+                // obfuscation may fail, we only care about the warning
+            }
+
+            expect(warnSpy).toHaveBeenCalledWith(
+                expect.stringContaining('`vmObfuscation` option is heavily not recommended')
+            );
+
+            warnSpy.mockRestore();
+        });
+
+        it('should not warn when vmObfuscation option is not used', async () => {
+            const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+            const config = createLoaderConfig(
+                { 'main': './index.js' },
+                {}
+            );
+
+            await runWebpack(config);
+
+            expect(warnSpy).not.toHaveBeenCalledWith(
+                expect.stringContaining('`vmObfuscation` option is heavily not recommended')
+            );
+
+            warnSpy.mockRestore();
+        });
+    });
 });
