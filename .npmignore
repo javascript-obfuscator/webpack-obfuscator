@@ -8,3 +8,5 @@ node_modules
 !*.d.ts
 tsconfig.json
 test
+.idea
+.claude
